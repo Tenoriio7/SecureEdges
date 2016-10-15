@@ -1,4 +1,4 @@
-package br.com.secureedges.dao;
+package br.com.secureedges.core.dao;
 
 import java.util.List;
 
@@ -6,18 +6,17 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.secureedges.models.Comodo;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.util.HibernateUtil;
 
-public class ComodoDAO {
-	
-	public void salvar(Comodo comodo) {
+public class Tipo_DispositivoDAO {
+	public void salvar(Tipo_Dispositivo Tipo_Dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 
 		try {
 			transacao = sessao.beginTransaction();
-			sessao.save(comodo);
+			sessao.save(Tipo_Dispositivo);
 			transacao.commit();
 		} catch (RuntimeException ex) {
 			if(transacao!=null)
@@ -29,46 +28,46 @@ public class ComodoDAO {
 		}
 	}
 	
-	public List<Comodo> listar() {
+	public List<Tipo_Dispositivo> listar() {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		List<Comodo> comodo = null;
+		List<Tipo_Dispositivo> tipo_dispositivos = null;
 
 		try {
-			Query consulta = sessao.getNamedQuery("Comodo.listar");
-			comodo = consulta.list();
+			Query consulta = sessao.getNamedQuery("Tipo_Dispositivo.listar");
+			tipo_dispositivos = consulta.list();
 		} catch (RuntimeException ex) {
 			throw ex;
 		} finally {
 			sessao.close();
 		}
-		return comodo;
+		return tipo_dispositivos;
 
 	}
 	
-	public static Comodo buscarPorCodigo(Long codigo) {
+	public static Tipo_Dispositivo buscarPorCodigo(Long codigo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Comodo comodo = null;
+		Tipo_Dispositivo tipo_dispositivo = null;
 		try{
-			Query consulta = sessao.getNamedQuery("Comodo.buscarPorCodigo");
+			Query consulta = sessao.getNamedQuery("Tipo_Dispositivo.buscarProCodigo");
 			consulta.setLong("codigo", codigo);
-			comodo = (Comodo)consulta.uniqueResult();
+			tipo_dispositivo = (Tipo_Dispositivo)consulta.uniqueResult();
 		}catch(RuntimeException ex)
 		{
 			throw ex;
 		} finally{
 			sessao.close();
 		}
-		return comodo;
+		return tipo_dispositivo;
 	}
 	
 	
-	public void excluir (Comodo comodo) {
+	public void excluir (Tipo_Dispositivo tipo_dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.delete(comodo);
+			sessao.delete(tipo_dispositivo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){
@@ -82,13 +81,13 @@ public class ComodoDAO {
 	}
 	
 	
-	public void editar(Comodo comodo) {
+	public void editar(Tipo_Dispositivo tipo_dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.update(comodo);
+			sessao.update(tipo_dispositivo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){

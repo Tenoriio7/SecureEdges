@@ -1,4 +1,4 @@
-package br.com.secureedges.models;
+package br.com.secureedges.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

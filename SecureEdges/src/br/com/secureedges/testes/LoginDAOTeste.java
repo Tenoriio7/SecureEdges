@@ -5,10 +5,10 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.secureedges.dao.LoginDAO;
-import br.com.secureedges.dao.UsuarioDAO;
-import br.com.secureedges.models.Login;
-import br.com.secureedges.models.Usuario;
+import br.com.secureedges.core.dao.LoginDAO;
+import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.domain.Login;
+import br.com.secureedges.domain.Usuario;
 
 
 public class LoginDAOTeste {

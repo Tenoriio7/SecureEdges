@@ -5,8 +5,8 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.secureedges.dao.EnderecoDAO;
-import br.com.secureedges.models.Endereco;
+import br.com.secureedges.core.dao.EnderecoDAO;
+import br.com.secureedges.domain.Endereco;
 
 public class EnderecoDAOTeste {
 	

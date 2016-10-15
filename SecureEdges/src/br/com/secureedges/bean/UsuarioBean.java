@@ -5,12 +5,12 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import br.com.secureedges.dao.EnderecoDAO;
-import br.com.secureedges.dao.LoginDAO;
-import br.com.secureedges.dao.UsuarioDAO;
-import br.com.secureedges.models.Endereco;
-import br.com.secureedges.models.Login;
-import br.com.secureedges.models.Usuario;
+import br.com.secureedges.core.dao.EnderecoDAO;
+import br.com.secureedges.core.dao.LoginDAO;
+import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.domain.Endereco;
+import br.com.secureedges.domain.Login;
+import br.com.secureedges.domain.Usuario;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean

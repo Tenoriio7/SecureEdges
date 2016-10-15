@@ -3,9 +3,9 @@ package br.com.secureedges.bean;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import br.com.secureedges.dao.UsuarioDAO;
 import br.com.secureedges.util.FacesUtil;
-import br.com.secureedges.models.Usuario;
+import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.domain.Usuario;
 
 @ManagedBean
 @SessionScoped  // diferença :  ele vai existir durante todo tempo de sessão

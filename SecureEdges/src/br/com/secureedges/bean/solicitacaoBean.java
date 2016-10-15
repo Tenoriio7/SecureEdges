@@ -7,12 +7,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import br.com.secureedges.dao.DispositivoDAO;
-import br.com.secureedges.dao.SolicitacaoDAO;
-import br.com.secureedges.dao.UsuarioDAO;
-import br.com.secureedges.models.Dispositivo;
-import br.com.secureedges.models.Solicitacao;
-import br.com.secureedges.models.Usuario;
+import br.com.secureedges.core.dao.DispositivoDAO;
+import br.com.secureedges.core.dao.SolicitacaoDAO;
+import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.domain.Dispositivo;
+import br.com.secureedges.domain.Solicitacao;
+import br.com.secureedges.domain.Usuario;
 import br.com.secureedges.util.FacesUtil;
 
 

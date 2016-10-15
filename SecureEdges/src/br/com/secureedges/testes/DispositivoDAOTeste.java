@@ -5,12 +5,12 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import br.com.secureedges.dao.ComodoDAO;
-import br.com.secureedges.dao.DispositivoDAO;
-import br.com.secureedges.dao.Tipo_DispositivoDAO;
-import br.com.secureedges.models.Comodo;
-import br.com.secureedges.models.Dispositivo;
-import br.com.secureedges.models.Tipo_Dispositivo;
+import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.core.dao.DispositivoDAO;
+import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.domain.Comodo;
+import br.com.secureedges.domain.Dispositivo;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 
 public class DispositivoDAOTeste {
 	@Test

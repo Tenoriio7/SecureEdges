@@ -5,8 +5,9 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import br.com.secureedges.dao.Tipo_DispositivoDAO;
-import br.com.secureedges.models.Tipo_Dispositivo;
+
+import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean

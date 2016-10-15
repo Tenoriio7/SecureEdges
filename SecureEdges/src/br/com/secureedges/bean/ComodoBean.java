@@ -5,9 +5,9 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import br.com.secureedges.dao.ComodoDAO;
-import br.com.secureedges.dao.Tipo_DispositivoDAO;
-import br.com.secureedges.models.Comodo;
+import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean

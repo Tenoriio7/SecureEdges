@@ -1,4 +1,4 @@
-package br.com.secureedges.dao.utils;
+package br.com.secureedges.core.dao.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

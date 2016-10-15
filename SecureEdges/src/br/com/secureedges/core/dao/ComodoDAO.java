@@ -1,23 +1,23 @@
-package br.com.secureedges.dao;
+package br.com.secureedges.core.dao;
 
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import br.com.secureedges.models.Login;
+
+import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.util.HibernateUtil;
 
-
-public class LoginDAO {
+public class ComodoDAO {
 	
-	public void salvar(Login Login) {
+	public void salvar(Comodo comodo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 
 		try {
 			transacao = sessao.beginTransaction();
-			sessao.save(Login);
+			sessao.save(comodo);
 			transacao.commit();
 		} catch (RuntimeException ex) {
 			if(transacao!=null)
@@ -29,46 +29,46 @@ public class LoginDAO {
 		}
 	}
 	
-	public List<Login> listar() {
+	public List<Comodo> listar() {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		List<Login> logins = null;
+		List<Comodo> comodo = null;
 
 		try {
-			Query consulta = sessao.getNamedQuery("Login.listar");
-			logins = consulta.list();
+			Query consulta = sessao.getNamedQuery("Comodo.listar");
+			comodo = consulta.list();
 		} catch (RuntimeException ex) {
 			throw ex;
 		} finally {
 			sessao.close();
 		}
-		return logins;
+		return comodo;
 
 	}
 	
-	public Login buscarPorCodigo(Long codigo) {
+	public static Comodo buscarPorCodigo(Long codigo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Login login = null;
+		Comodo comodo = null;
 		try{
-			Query consulta = sessao.getNamedQuery("Login.buscarPorCodigo");
+			Query consulta = sessao.getNamedQuery("Comodo.buscarPorCodigo");
 			consulta.setLong("codigo", codigo);
-			login = (Login)consulta.uniqueResult();
+			comodo = (Comodo)consulta.uniqueResult();
 		}catch(RuntimeException ex)
 		{
 			throw ex;
 		} finally{
 			sessao.close();
 		}
-		return login;
+		return comodo;
 	}
 	
 	
-	public void excluir (Login login) {
+	public void excluir (Comodo comodo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.delete(login);
+			sessao.delete(comodo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){
@@ -82,13 +82,13 @@ public class LoginDAO {
 	}
 	
 	
-	public void editar(Login login) {
+	public void editar(Comodo comodo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.update(login);
+			sessao.update(comodo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){
@@ -100,6 +100,5 @@ public class LoginDAO {
 		}
 		
 	}
-	
 
 }

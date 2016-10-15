@@ -1,4 +1,4 @@
-package br.com.secureedges.dao;
+package br.com.secureedges.core.dao;
 
 import java.util.List;
 
@@ -6,17 +6,19 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.secureedges.models.Tipo_Dispositivo;
+import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.util.HibernateUtil;
 
-public class Tipo_DispositivoDAO {
-	public void salvar(Tipo_Dispositivo Tipo_Dispositivo) {
+public class DispositivoDAO {
+	
+	
+	public void salvar(Dispositivo dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 
 		try {
 			transacao = sessao.beginTransaction();
-			sessao.save(Tipo_Dispositivo);
+			sessao.save(dispositivo);
 			transacao.commit();
 		} catch (RuntimeException ex) {
 			if(transacao!=null)
@@ -28,46 +30,46 @@ public class Tipo_DispositivoDAO {
 		}
 	}
 	
-	public List<Tipo_Dispositivo> listar() {
+	public List<Dispositivo> listar() {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		List<Tipo_Dispositivo> tipo_dispositivos = null;
+		List<Dispositivo> dispositivo = null;
 
 		try {
-			Query consulta = sessao.getNamedQuery("Tipo_Dispositivo.listar");
-			tipo_dispositivos = consulta.list();
+			Query consulta = sessao.getNamedQuery("Dispositivo.listar");
+			dispositivo = consulta.list();
 		} catch (RuntimeException ex) {
 			throw ex;
 		} finally {
 			sessao.close();
 		}
-		return tipo_dispositivos;
+		return dispositivo;
 
 	}
 	
-	public static Tipo_Dispositivo buscarPorCodigo(Long codigo) {
+	public static Dispositivo buscarPorCodigo(Long codigo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Tipo_Dispositivo tipo_dispositivo = null;
+		Dispositivo dispositivo = null;
 		try{
-			Query consulta = sessao.getNamedQuery("Tipo_Dispositivo.buscarProCodigo");
+			Query consulta = sessao.getNamedQuery("Dispositivo.buscarPorCodigo");
 			consulta.setLong("codigo", codigo);
-			tipo_dispositivo = (Tipo_Dispositivo)consulta.uniqueResult();
+			dispositivo = (Dispositivo)consulta.uniqueResult();
 		}catch(RuntimeException ex)
 		{
 			throw ex;
 		} finally{
 			sessao.close();
 		}
-		return tipo_dispositivo;
+		return dispositivo;
 	}
 	
 	
-	public void excluir (Tipo_Dispositivo tipo_dispositivo) {
+	public void excluir (Dispositivo dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.delete(tipo_dispositivo);
+			sessao.delete(dispositivo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){
@@ -81,13 +83,13 @@ public class Tipo_DispositivoDAO {
 	}
 	
 	
-	public void editar(Tipo_Dispositivo tipo_dispositivo) {
+	public void editar(Dispositivo dispositivo) {
 		Session sessao = HibernateUtil.getSessionFactory().openSession();
 		Transaction transacao = null;
 		
 		try{
 			transacao = sessao.beginTransaction();
-			sessao.update(tipo_dispositivo);
+			sessao.update(dispositivo);
 			transacao.commit();
 			}catch (RuntimeException ex){
 				if(transacao !=null){

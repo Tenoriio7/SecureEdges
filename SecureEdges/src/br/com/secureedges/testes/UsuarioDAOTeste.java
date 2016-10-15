@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import br.com.secureedges.dao.EnderecoDAO;
-import br.com.secureedges.dao.UsuarioDAO;
-import br.com.secureedges.models.Endereco;
-import br.com.secureedges.models.Solicitacao;
-import br.com.secureedges.models.Usuario;
+import br.com.secureedges.core.dao.EnderecoDAO;
+import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.domain.Endereco;
+import br.com.secureedges.domain.Solicitacao;
+import br.com.secureedges.domain.Usuario;
 
 
 public class UsuarioDAOTeste {

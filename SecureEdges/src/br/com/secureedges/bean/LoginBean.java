@@ -3,7 +3,7 @@ package br.com.secureedges.bean;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import br.com.secureedges.models.Login;
+import br.com.secureedges.domain.Login;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean

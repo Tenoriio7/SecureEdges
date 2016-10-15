@@ -1,4 +1,4 @@
-package br.com.secureedges.dao;
+package br.com.secureedges.core.dao;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import br.com.secureedges.models.Endereco;
+import br.com.secureedges.domain.Endereco;
 import br.com.secureedges.util.HibernateUtil;
 
 public class EnderecoDAO {

@@ -2,9 +2,9 @@ package br.com.secureedges.testes;
 
 import org.junit.Test;
 
-import br.com.secureedges.dao.Tipo_DispositivoDAO;
-import br.com.secureedges.models.Dispositivo;
-import br.com.secureedges.models.Tipo_Dispositivo;
+import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.domain.Dispositivo;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 
 public class Tipo_DispositivoDAOTeste {
 	

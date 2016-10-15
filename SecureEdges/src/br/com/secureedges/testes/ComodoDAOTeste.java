@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import br.com.secureedges.dao.ComodoDAO;
-import br.com.secureedges.models.Comodo;
+
+import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.domain.Comodo;
 
 public class ComodoDAOTeste {
 
