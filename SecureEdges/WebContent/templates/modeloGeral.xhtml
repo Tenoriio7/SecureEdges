@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:insert name="metadata"/>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Secure Edges</title>
+</h:head>
+
+<h:body>
+	<p:growl id="msgGlobal"/>
+	<p:layout fullPage="true">
+ 
+    <p:layoutUnit position="north" size="100" header="Secure Edges" resizable="false" closable="false" collapsible="false">
+        <h:outputText value="Informações a Definir" />
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="south" size="100" header="Rodapé" resizable="false" closable="false" collapsible="false">
+        <h:outputText value="Informações da Empresa" />
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="west" size="250" header="esquerda" resizable="false" closable="false" collapsible="false">
+        <h:form>
+        <p:panelMenu>
+        	<p:submenu label="Perfil">
+        		<p:menuitem value="Editar"/>
+        		<p:menuitem value="Cadastrar" outcome="/Pages/usuarioCadastro.xhtml"/>
+        		<p:menuitem value="Listar Perfis" outcome="/Pages/usuarioPesquisa.xhtml"/>
+        		<p:menuitem value="Sair"/>
+        	</p:submenu>
+        	<p:submenu label="Solicitações">
+        	<p:menuitem value="Nova"/>
+        	<p:menuitem value="Pendentes"/>
+        	<p:menuitem value="Encerradas"/>
+        	</p:submenu>
+        	<p:submenu label="Dispositivos">
+        		<p:menuitem label="Todos"/>
+        		<p:menuitem value="Possuo Permissão"/>
+        		<p:menuitem value="Não Possuo Permissão"/>
+        		<p:menuitem value="Cadastrar Dispositivo"/>
+        		<p:menuitem value="Listar Dispositivo"/>
+        		<p:menuitem value="Cadastrar Tipo de Dispositivo" outcome="/Pages/tipoDispositivoCadastro.xhtml"/>
+        		<p:menuitem value="Listar Tipo de Dispositivo" outcome="/Pages/tipoDispositivoPesquisa.xhtml"/>
+        	</p:submenu>
+        	
+        	<p:submenu label="Comodo">
+        		<p:menuitem label="Todos"/>
+        		<p:menuitem value="Cadastrar Comodo" outcome="/Pages/comodoCadastro.xhtml"/>
+        		<p:menuitem value="Listar Comodos" outcome="/Pages/comodoPesquisa.xhtml"/>
+        	</p:submenu>
+        </p:panelMenu>
+        </h:form>
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="east" size="200" header="direita" resizable="false" closable="false" collapsible="false" effect="drop">
+        <h:outputText value="Informações a Definir	" />
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="center" resizable="false" closable="false" collapsible="false">
+    <ui:insert name = "conteudo"></ui:insert>
+       
+    </p:layoutUnit>
+ 
+</p:layout>
+</h:body>
+</html>

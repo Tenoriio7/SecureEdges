@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<ui:composition template="/templates/modeloGeral.xhtml">
+ 		<ui:define name="metadate">
+ 		<f:metadata>
+ 			<f:event listener="#{solicitacaoBean.carregarDispositivos}" type="preRenderView"></f:event>
+ 		</f:metadata>	
+	</ui:define> 
+		<ui:define name="conteudo">
+			<h:form id="frmSolCad">
+			<!-- columns="4"  dois por linha no painelGrid -->
+			<p:toolbar>
+				<f:facet name="left">
+				<h:outputText value="Solicitação"></h:outputText>
+				</f:facet>
+			</p:toolbar>
+			<p:dataTable emptyMessage="Nenhum Registro Encontrado."
+				value="#{solicitacaoBean.listaDispositivos}"
+				filteredValue="#{solicitacaoBean.listaDispositivosFiltrados}"
+				var="dispositivo" paginator="true" rows="4">
+
+				<!-- filterBy="" filtrar  sortBy="" ordenar -->
+				<p:column headerText="Codigo" width="5%">
+					<h:outputText value="#{dispositivo.codigo}"></h:outputText>
+				</p:column>
+				<p:column headerText="Descricao" filterBy="#{dispositivo.descricao}"
+					sortBy="#{dispositivo.descricao}" width="10%">
+					<h:outputText value="#{dispositivo.descricao}"></h:outputText>
+				</p:column>
+				
+				<p:column headerText="Comodo" filterBy="#{dispositivo.descricao}"
+					sortBy="#{produto.descricao}" width="10%">
+					<h:outputText value="#{dispositivo.comodo.descricao}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Opções" style="width: 10%">
+					<p:commandButton value="Adicionar" actionListener="#{solicitacaoBean.adicionar(dispositivo)}"
+					update=":frmSolCad:tblItens" width="5%"/>
+
+				</p:column>
+
+			</p:dataTable>
+			<p:separator/>
+				<p:dataTable emptyMessage="Nenhum Registro Encontrado."
+				value="#{solicitacaoBean.solicitacaoCadastro.dispositivo}"
+				var="dispositivo" paginator="true" rows="4" id="tblItens">
+
+				<!-- filterBy="" filtrar  sortBy="" ordenar -->
+				<p:column headerText="Produto">
+					<h:outputText value="#{dispositivo
+					.descricao}"></h:outputText>
+				</p:column>
+				
+				<p:column headerText="Comodo" filterBy="#{dispositivo.descricao}"
+					sortBy="#{produto.descricao}">
+					<h:outputText value="#{dispositivo.comodo.descricao}"></h:outputText>
+				</p:column>
+			
+
+				<p:column headerText="Opções" style="width: 10%">
+					<p:commandButton value="Remover" actionListener="#{solicitacaoBean.remover(dipositivo)}" update=":frmSolCad:tblItens" />
+
+				</p:column>
+
+			</p:dataTable>
+			<p:separator/>
+			<!-- oncomplete espera carregar tudo -->
+			<div align="right">
+			<p:commandButton value="Finalizar Solicitacao" oncomplete="PF('wvDlgFinVenda').show();"
+			actionListener="#{solicitacaoBean.carregarDadosSolicitacao}" update=":frmPdl"/>
+			</div>			
+			</h:form>
+			
+				<p:dialog closable="true" modal="true" draggable="true" resizable="false"
+			header="Dados da Solicitação" widgetVar="wvDlgFinVenda" appendTo="@(body)"
+			id="pdlVenda">
+				<h:form id="frmPdl">
+					<h:panelGrid columns="2">
+				
+						<h:outputText value="Dispositivo:"/>
+						<h:outputText value="#{solicitacaoBean.solicitacaoCadastro.dispositivo.descricao}"/>
+						
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:commandButton value="Salvar" actionListener="#{vendaBean.salvar}" update=":msgGlobal :frmSolCad:tblItens" oncomplete="PF('wvDlgFinVenda').hide();"/>
+						<p:commandButton value="Voltar" onclick="PF('wvDlgFinVenda').hide();"/>
+					</h:panelGrid>
+				</h:form>		
+			</p:dialog>	
+			
+			
+			
+		</ui:define>
+	</ui:composition>
+	</html>
