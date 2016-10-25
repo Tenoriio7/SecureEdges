@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @NamedQuery(name="Dispositivo.listar",query="SELECT dispositivo FROM Dispositivo dispositivo"),
 @NamedQuery(name="Dispositivo.buscarPorCodigo",query="SELECT dispositivo FROM Dispositivo dispositivo WHERE dispositivo.Codigo=:codigo")
 })
-public class Dispositivo {
+public class Dispositivo extends EntidadeDominio {
 	
 	
 	@Id
@@ -52,6 +52,8 @@ public class Dispositivo {
 
 	
 	public Comodo getComodo() {
+		if (Comodo ==null)
+				Comodo =  new Comodo();
 		return Comodo;
 	}
 
@@ -71,6 +73,8 @@ public class Dispositivo {
 	}
 
 	public Tipo_Dispositivo getTP_Dispositivo() {
+		if (TP_Dispositivo ==null)
+			TP_Dispositivo =  new Tipo_Dispositivo();
 		return TP_Dispositivo;
 	}
 
