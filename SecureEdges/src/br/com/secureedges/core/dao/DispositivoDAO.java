@@ -136,13 +136,11 @@ public  List<EntidadeDominio> listar() {
 		while(rSet.next()) {
 			
 			Dispositivo dispositivo = new Dispositivo();
-			dispositivo.setCodigo(rSet.getLong("disp_Codigo")););
-			Produto.setPlataforma(rSet.getString("pro_plataforma"));
-			Produto.setPreco(rSet.getBigDecimal("pro_preco"));
-			Produto.setQuantidade(rSet.getBigDecimal("pro_quantidade"));	
-			Produto.setSetor(rSet.getString("pro_setor"));
-			Produto.setStatus(rSet.getString("pro_status"));
-			lista.add(Produto);
+			dispositivo.setCodigo(rSet.getLong("disp_Codigo"));
+			dispositivo.setDescricao(rSet.getString("disp_Descricao"));
+			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
+			dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
+			lista.add(dispositivo);
 		}
 		
 		
@@ -155,11 +153,37 @@ public  List<EntidadeDominio> listar() {
 
 }
 
-	@Override
-	public EntidadeDominio buscarPorCodigo(Long codigo) {
-		// TODO Auto-generated method stub
-		return null;
+public EntidadeDominio buscarPorCodigo(Long codigo) {
+	StringBuffer sql = new StringBuffer(); 
+	sql.append("SELECT * FROM db_secureedges.tb_dispositivo");
+	sql.append(" where tb_dispositivo.disp_codigo = ?");
+	
+	Dispositivo dispositivo = new Dispositivo();
+	Connection con = Conexao.getConnection();
+	try {
+		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+		pstm.setLong(1, codigo);
+		ResultSet rSet = pstm.executeQuery();
+		
+		while(rSet.next()){
+			
+			dispositivo.setCodigo(rSet.getLong("disp_Codigo"));
+			dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
+			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
+			dispositivo.setDescricao(rSet.getString("disp_descricao"));
+				
+			
+		}
+		
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+		FacesUtil.adicionarMSGError(e.getMessage());
 	}
+	
+	return dispositivo;
+}
 
 	@Override
 	public EntidadeDominio consultar(EntidadeDominio entidade) {
