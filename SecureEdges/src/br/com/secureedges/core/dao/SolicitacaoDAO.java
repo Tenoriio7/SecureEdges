@@ -1,104 +1,181 @@
 package br.com.secureedges.core.dao;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
 
+import br.com.secureedges.core.IDAO;
+import br.com.secureedges.core.util.factory.Conexao;
+import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Solicitacao;
-import br.com.secureedges.util.HibernateUtil;
+import br.com.secureedges.util.FacesUtil;
 
-public class SolicitacaoDAO {
-	
-	public  void salvar(Solicitacao Solicitacao) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
+public class SolicitacaoDAO implements IDAO {
 
-		try {
-			transacao = sessao.beginTransaction();
-			sessao.save(Solicitacao);
-			transacao.commit();
-		} catch (RuntimeException ex) {
-			if(transacao!=null)
-			transacao.rollback();
-			throw ex; 
+	public Long Salvar(EntidadeDominio entidade) throws SQLException {
 
-		}finally{
-			sessao.close();
-		}
-	}
-	
-	public List<Solicitacao> listar() {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		List<Solicitacao> solicitacaos = null;
+		Solicitacao solicitacao = new Solicitacao();
+		solicitacao = (Solicitacao) entidade;
+		Long codigo = null;
+
+		StringBuffer sql = new StringBuffer();
+
+		sql.append(
+				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Dispositivo_disp_Codigo,sol_data");
+		sql.append(" VALUES (?,?,?,?,?)");
+		Connection con = Conexao.getConnection();
+		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),
+				Statement.RETURN_GENERATED_KEYS);
 
 		try {
-			Query consulta = sessao.getNamedQuery("Solicitacao.listar");
-			solicitacaos = consulta.list();
-		} catch (RuntimeException ex) {
-			throw ex;
-		} finally {
-			sessao.close();
+			SimpleDateFormat stf = new SimpleDateFormat("yyyy/MM/dd");
+			String solicitacaoHorario = stf.format(solicitacao.getHorario());
+
+			int i = 0;
+			pstm.setLong(++i, solicitacao.getCodigo());
+			pstm.setString(++i, solicitacao.getStatus());
+			pstm.setLong(++i, solicitacao.getDispositivo().getCodigo());
+			pstm.setLong(++i, solicitacao.getUsuario().getCodigo());
+
+			pstm.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+			return null;
 		}
-		return solicitacaos;
+		ResultSet rset = pstm.getGeneratedKeys();
+		while (rset.next()) {
+			codigo = (long) rset.getInt(1);
+
+		}
+
+		codigo = Long.parseLong(codigo.toString());
+		return codigo;
 
 	}
-	
-	public Solicitacao buscarPorCodigo(Long codigo) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Solicitacao solicitacao = null;
-		try{
-			Query consulta = sessao.getNamedQuery("Solicitacao.buscarProCodigo");
-			consulta.setLong("codigo", codigo);
-			solicitacao = (Solicitacao)consulta.uniqueResult();
-		}catch(RuntimeException ex)
-		{
-			throw ex;
-		} finally{
-			sessao.close();
+
+	public void Editar(EntidadeDominio entidade) throws SQLException {
+		if (!(entidade instanceof Solicitacao))
+			return;
+
+		Solicitacao solicitacao = new Solicitacao();
+		solicitacao = (Solicitacao) entidade;
+
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("UPDATE db_secureedges.tb_solicitacao set sol_Status = ? ");
+		sql.append("WHERE sol_Codigo=?");
+
+		Connection con = Conexao.getConnection();
+
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			int i = 0;
+			pstm.setString(++i, solicitacao.getStatus());
+			pstm.setLong(++i, solicitacao.getCodigo());
+			pstm.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
 		}
+
+	}
+
+	public void Excluir(EntidadeDominio entidade) throws SQLException {
+		if (!(entidade instanceof Solicitacao))
+			return;
+
+		Solicitacao solicitacao = new Solicitacao();
+		solicitacao = (Solicitacao) entidade;
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("delete from db_secureedges.tb_solicitacao where sol_Codigo = ?");
+
+		Connection con = Conexao.getConnection();
+
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setLong(1, solicitacao.getCodigo());
+			pstm.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError((e.getMessage()));
+		}
+
+	}
+
+	public List<EntidadeDominio> listar() {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM db_secureedges.tb_solicitacao");
+		sql.append(" order by db_secureedges.tb_solicitacao.sol_Codigo ;");
+		List<EntidadeDominio> lista = new ArrayList<EntidadeDominio>();
+
+		Connection con = Conexao.getConnection();
+
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			ResultSet rSet = pstm.executeQuery();
+
+			while (rSet.next()) {
+
+				Solicitacao solicitacao = new Solicitacao();
+				solicitacao.setCodigo(rSet.getLong("sol_Codigo"));
+				solicitacao.setStatus((rSet.getString("sol_Status")));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_usuario_usr_Codigo")));
+				lista.add(solicitacao);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+		}
+
+		return lista;
+	}
+
+	@Override
+	public EntidadeDominio buscarPorCodigo(Long codigo) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM db_secureedges.tb_solicitacao");
+		sql.append(" where tb_solicitacao.sol_Codigo =?");
+
+		Connection con = Conexao.getConnection();
+		Solicitacao solicitacao = new Solicitacao();
+
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			ResultSet rSet = pstm.executeQuery();
+
+			while (rSet.next()) {
+
+				solicitacao.setCodigo(rSet.getLong("sol_Codigo"));
+				solicitacao.setStatus((rSet.getString("sol_Status")));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_usuario_usr_Codigo")));
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+		}
+
 		return solicitacao;
 	}
-	
-	
-	public void excluir (Solicitacao solicitacao) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
-		
-		try{
-			transacao = sessao.beginTransaction();
-			sessao.delete(solicitacao);
-			transacao.commit();
-			}catch (RuntimeException ex){
-				if(transacao !=null){
-					transacao.rollback();
-			}
-			throw ex;
-		} finally{
-			sessao.close();
-		}
-		
-	}
-	
-	
-	public void editar(Solicitacao solicitacao) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
-		
-		try{
-			transacao = sessao.beginTransaction();
-			sessao.update(solicitacao);
-			transacao.commit();
-			}catch (RuntimeException ex){
-				if(transacao !=null){
-					transacao.rollback();
-			}
-			throw ex;
-		} finally{
-			sessao.close();
-		}
-		
-	}
 
+	@Override
+	public EntidadeDominio consultar(EntidadeDominio entidade) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

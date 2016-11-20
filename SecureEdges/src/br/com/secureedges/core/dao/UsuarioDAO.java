@@ -1,124 +1,394 @@
 package br.com.secureedges.core.dao;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.junit.Test;
 
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+
+import br.com.secureedges.core.IDAO;
+import br.com.secureedges.core.util.factory.Conexao;
+import br.com.secureedges.util.FacesUtil;
+import br.com.secureedges.domain.Endereco;
+import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Usuario;
-import br.com.secureedges.util.HibernateUtil;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements IDAO {
 	
 	
-	public void salvar(Usuario Usuario) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
-
+	public Long Salvar(EntidadeDominio entidade) throws SQLException {
+	
+		if(!(entidade instanceof Usuario))
+			return null;
+		
+		Usuario usuario = new Usuario();
+		usuario = (Usuario) entidade;
+		Long retorno = null ;
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("INSERT INTO db_tenoriogames.tb_usuario(usr_Codigo,usr_CPF,usr_Console,usr_Email,");
+		sql.append("end_Bairro,end_CEP,");
+		sql.append("end_Cidade,end_Estado,end_Numero,end_Rua,");
+		sql.append("usr_Idade,usr_Nome,usr_RG,usr_Senha,usr_Sexo,usr_Sobrenome,usr_Status,usr_Telefone,dtCadastro)");
+		sql.append("VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		
+		Connection con = Conexao.getConnection();
+		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),Statement.RETURN_GENERATED_KEYS);
 		try {
-			transacao = sessao.beginTransaction();
-			sessao.save(Usuario);
-			transacao.commit();
-		} catch (RuntimeException ex) {
-			if(transacao!=null)
-			transacao.rollback();
-			throw ex; 
-
-		}finally{
-			sessao.close();
+			
+			int i=0;
+			pstm.setLong(++i, usuario.getCodigo());
+			pstm.setString(++i,usuario.getCPF());
+			pstm.setString(++i,usuario.getEmail());
+			pstm.setString(++i,usuario.getEndereco().getBairro());
+			pstm.setString(++i, usuario.getEndereco().getCEP());
+			pstm.setString(++i,usuario.getEndereco().getCidade());
+			pstm.setString(++i,usuario.getEndereco().getEstado());
+			pstm.setInt(++i,usuario.getEndereco().getNumero());
+			pstm.setString(++i,usuario.getEndereco().getRua());
+			pstm.setInt(++i,usuario.getIdade());
+			pstm.setString(++i,usuario.getNome());
+			pstm.setString(++i,usuario.getRG());
+			pstm.setString(++i,usuario.getSenha());
+			pstm.setString(++i,usuario.getSexo());
+			pstm.setString(++i,usuario.getSobrenome());
+			pstm.setString(++i,usuario.getStatus());
+			pstm.setString(++i,usuario.getTelefone());
+			SimpleDateFormat stf = new SimpleDateFormat("yyyy/MM/dd");
+			String cadastro = stf.format(new Date());
+			pstm.setString(++i, cadastro);
+		
+		
+			pstm.executeUpdate();
+			ResultSet rset =  pstm.getGeneratedKeys();
+			while(rset.next()){
+				rset.getInt(1);
+				retorno=(long) rset.getInt(1);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
 		}
+		
+		return retorno;
+
+	}
+
+	
+	public List<EntidadeDominio> listar() {
+		StringBuffer sql = new StringBuffer(); 
+		sql.append("SELECT * FROM db_tenoriogames.tb_usuario;");			
+		List<EntidadeDominio> lista = new ArrayList<EntidadeDominio>();
+		
+		Connection con = Conexao.getConnection();
+		
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			ResultSet rSet = pstm.executeQuery();
+			
+			while(rSet.next()) {
+				
+				Usuario usuario = new Usuario();
+				usuario.setCodigo(rSet.getLong("usr_Codigo"));
+				usuario.setCPF(rSet.getString("usr_CPF"));
+				usuario.setEmail(rSet.getString("usr_Email"));
+				
+				Endereco endereco =  new Endereco();
+				endereco.setBairro(rSet.getString("end_Bairro"));
+				endereco.setCEP(rSet.getString("end_CEP"));
+				endereco.setCidade(rSet.getString("end_Cidade"));
+				endereco.setEstado(rSet.getString("end_Estado"));
+				endereco.setNumero(rSet.getInt("end_Numero"));
+				endereco.setRua(rSet.getString("end_Rua"));
+				usuario.setEndereco(endereco);	
+				usuario.setIdade(rSet.getInt("usr_Idade"));
+				usuario.setNome(rSet.getString("usr_Nome"));
+				usuario.setRG(rSet.getString("usr_RG"));
+				usuario.setSenha(rSet.getString("usr_Senha"));
+				usuario.setSexo(rSet.getString("usr_Sexo"));
+				usuario.setSobrenome(rSet.getString("usr_Sobrenome"));
+				usuario.setStatus(rSet.getString("usr_Status"));
+				usuario.setTelefone(rSet.getString("usr_Telefone"));
+				usuario.setDtCadastro(rSet.getDate("dtCadastro"));		
+				
+				lista.add(usuario);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+		}
+		
+		return lista;
+		
 	}
 	
-	public List<Usuario> listar() {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		List<Usuario> usuarios = null;
-
-		try {
-			Query consulta = sessao.getNamedQuery("Usuario.listar");
-			usuarios = consulta.list();
-		} catch (RuntimeException ex) {
-			throw ex;
-		} finally {
-			sessao.close();
-		}
-		return usuarios;
-
-	}
 	
-	public  Usuario buscarPorCodigo(Long codigo) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Usuario usuario = null;
-		try{
-			Query consulta = sessao.getNamedQuery("Usuario.buscarProCodigo");
-			consulta.setLong("codigo", codigo);
-			usuario = (Usuario)consulta.uniqueResult();
-		}catch(RuntimeException ex)
-		{
-			throw ex;
-		} finally{
-			sessao.close();
+	public Usuario buscarPorCodigo(Long codigo) {
+		StringBuffer sql = new StringBuffer(); 
+		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append(" where tb_usuario.usr_Codigo =?");
+		
+		
+		Connection con = Conexao.getConnection();
+		Usuario usuario = new Usuario();
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setLong(1, codigo);
+			ResultSet rSet = pstm.executeQuery();
+			
+			while(rSet.next()){
+				
+				usuario.setCodigo(rSet.getLong("usr_Codigo"));
+				usuario.setCPF(rSet.getString("usr_CPF"));
+				usuario.setEmail(rSet.getString("usr_Email"));
+				
+				Endereco endereco =  new Endereco();
+				endereco.setBairro(rSet.getString("end_Bairro"));
+				endereco.setCEP(rSet.getString("end_CEP"));
+				endereco.setCidade(rSet.getString("end_Cidade"));
+				endereco.setEstado(rSet.getString("end_Estado"));
+				endereco.setNumero(rSet.getInt("end_Numero"));
+				endereco.setRua(rSet.getString("end_Rua"));
+				usuario.setEndereco(endereco);	
+				usuario.setIdade(rSet.getInt("usr_Idade"));
+				usuario.setNome(rSet.getString("usr_Nome"));
+				usuario.setRG(rSet.getString("usr_RG"));
+				usuario.setSenha(rSet.getString("usr_Senha"));
+				usuario.setSexo(rSet.getString("usr_Sexo"));
+				usuario.setSobrenome(rSet.getString("usr_Sobrenome"));
+				usuario.setStatus(rSet.getString("usr_Status"));
+				usuario.setTelefone(rSet.getString("usr_Telefone"));
+				usuario.setDtCadastro(rSet.getDate("dtCadastro"));				
+				
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
 		}
+		
 		return usuario;
+	
+
 	}
 	
 	
-	public void excluir (Usuario usuario) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
+	
+	public void Excluir(EntidadeDominio entidade) {
 		
-		try{
-			transacao = sessao.beginTransaction();
-			sessao.delete(usuario);
-			transacao.commit();
-			}catch (RuntimeException ex){
-				if(transacao !=null){
-					transacao.rollback();
-			}
-			throw ex;
-		} finally{
-			sessao.close();
+		if(!(entidade instanceof Usuario))
+			return;
+		
+		Usuario usuario = new Usuario();
+		usuario = (Usuario) entidade;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("delete from db_tenoriogames.tb_usuario where usr_Codigo = ?");
+		
+		Connection con = Conexao.getConnection();
+		
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setLong(1, usuario.getCodigo());
+			pstm.executeUpdate();
+			FacesUtil.adicionarMSGInfo("Removido com sucesso!");
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError((e.getMessage()));
 		}
+		
+		
 		
 	}
 	
 	
-	public void editar(Usuario usuario) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Transaction transacao = null;
+	
+	
+	public void Editar(EntidadeDominio entidade) throws SQLException {
 		
-		try{
-			transacao = sessao.beginTransaction();
-			sessao.update(usuario);
-			transacao.commit();
-			}catch (RuntimeException ex){
-				if(transacao !=null){
-					transacao.rollback();
-			}
-			throw ex;
-		} finally{
-			sessao.close();
+		if(!(entidade instanceof Usuario))
+			return;
+		
+		Usuario usuario = new Usuario();
+		usuario = (Usuario) entidade;
+		Long retorno = null ;
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("UPDATE db_tenoriogames.tb_usuario set usr_Codigo=?, usr_CPF=?, usr_Console =? , usr_Email = ?, ");
+		sql.append("end_Bairro = ? ,end_CEP = ?, ");
+		sql.append("end_Cidade = ?, end_Estado = ? , end_Numero = ? , end_Rua = ? , ");
+		sql.append("usr_Idade = ?, usr_Nome = ? ,usr_RG = ? ,usr_Senha= ? , usr_Sexo= ? , usr_Sobrenome = ? , usr_Status = ? , usr_Telefone = ?, dtCadastro = ? ");
+		
+		Connection con = Conexao.getConnection();
+		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),Statement.RETURN_GENERATED_KEYS);
+		try {
+			
+			int i=0;
+			pstm.setLong(++i, usuario.getCodigo());
+			pstm.setString(++i,usuario.getCPF());
+			pstm.setString(++i,usuario.getEmail());
+			pstm.setString(++i,usuario.getEndereco().getBairro());
+			pstm.setString(++i, usuario.getEndereco().getCEP());
+			pstm.setString(++i,usuario.getEndereco().getCidade());
+			pstm.setString(++i,usuario.getEndereco().getEstado());
+			pstm.setInt(++i,usuario.getEndereco().getNumero());
+			pstm.setString(++i,usuario.getEndereco().getRua());
+			pstm.setInt(++i,usuario.getIdade());
+			pstm.setString(++i,usuario.getNome());
+			pstm.setString(++i,usuario.getRG());
+			pstm.setString(++i,usuario.getSenha());
+			pstm.setString(++i,usuario.getSexo());
+			pstm.setString(++i,usuario.getSobrenome());
+			pstm.setString(++i,usuario.getStatus());
+			pstm.setString(++i,usuario.getTelefone());
+			SimpleDateFormat stf = new SimpleDateFormat("yyyy/MM/dd");
+			String cadastro = stf.format(new Date());
+			pstm.setString(++i, cadastro);
+		
+		
+			System.out.println(pstm.executeUpdate());
+			pstm.executeUpdate();
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
 		}
 		
+		
+
 	}
 	
 	public Usuario autenticar (String cpf, String senha){
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
-		Usuario usuario = null;
+		StringBuffer sql = new StringBuffer(); 
+		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append(" WHERE tb_usuario.usr_CPF = ? AND tb_usuario.usr_Senha= ?");
+		
+		Usuario usuario = new  Usuario();
+	
+		Connection con = Conexao.getConnection();
 
 		try {
-			Query consulta = sessao.getNamedQuery("Usuario.autenticar");
-			consulta.setString("cpf", cpf);
-			consulta.setString("senha", senha);
-			usuario = (Usuario) consulta.uniqueResult();
-		} catch (RuntimeException ex) {
-			throw ex;
-		} finally {
-			sessao.close();
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setString(1, cpf);
+			pstm.setString(2, senha);
+			ResultSet rSet = pstm.executeQuery();
+			
+			while(rSet.next()){
+				
+				usuario.setCodigo(rSet.getLong("usr_Codigo"));
+				usuario.setCPF(rSet.getString("usr_CPF"));
+				usuario.setEmail(rSet.getString("usr_Email"));
+				
+				Endereco endereco =  new Endereco();
+				endereco.setBairro(rSet.getString("end_Bairro"));
+				endereco.setCEP(rSet.getString("end_CEP"));
+				endereco.setCidade(rSet.getString("end_Cidade"));
+				endereco.setEstado(rSet.getString("end_Estado"));
+				endereco.setNumero(rSet.getInt("end_Numero"));
+				endereco.setRua(rSet.getString("end_Rua"));
+				usuario.setEndereco(endereco);	
+				usuario.setIdade(rSet.getInt("usr_Idade"));
+				usuario.setNome(rSet.getString("usr_Nome"));
+				usuario.setRG(rSet.getString("usr_RG"));
+				usuario.setSenha(rSet.getString("usr_Senha"));
+				usuario.setSexo(rSet.getString("usr_Sexo"));
+				usuario.setSobrenome(rSet.getString("usr_Sobrenome"));
+				usuario.setStatus(rSet.getString("usr_Status"));
+				usuario.setTelefone(rSet.getString("usr_Telefone"));
+				usuario.setDtCadastro(rSet.getDate("dtCadastro"));	
+			
+				
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
 		}
-		return usuario;  
+		
+		return usuario;
+	 
 		
 	}
 
 
+	public EntidadeDominio consultar(EntidadeDominio entidade) {
+		StringBuffer sql = new StringBuffer(); 
+		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append(" where tb_usuario.usr_CPF=?");
+		Usuario usuarioRecebe =  (Usuario) entidade;
+		
+		Connection con = Conexao.getConnection();
+		Usuario usuario = new Usuario();
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setString(1, usuarioRecebe.getCPF());
+			ResultSet rSet = pstm.executeQuery();
+			
+			while(rSet.next()){
+				
+				usuario.setCodigo(rSet.getLong("usr_Codigo"));
+				usuario.setCPF(rSet.getString("usr_CPF"));
+				usuario.setEmail(rSet.getString("usr_Email"));
+				
+				Endereco endereco =  new Endereco();
+				endereco.setBairro(rSet.getString("end_Bairro"));
+				endereco.setCEP(rSet.getString("end_CEP"));
+				endereco.setCidade(rSet.getString("end_Cidade"));
+				endereco.setEstado(rSet.getString("end_Estado"));
+				endereco.setNumero(rSet.getInt("end_Numero"));
+				endereco.setRua(rSet.getString("end_Rua"));
+				usuario.setEndereco(endereco);	
+				usuario.setIdade(rSet.getInt("usr_Idade"));
+				usuario.setNome(rSet.getString("usr_Nome"));
+				usuario.setRG(rSet.getString("usr_RG"));
+				usuario.setSenha(rSet.getString("usr_Senha"));
+				usuario.setSexo(rSet.getString("usr_Sexo"));
+				usuario.setSobrenome(rSet.getString("usr_Sobrenome"));
+				usuario.setStatus(rSet.getString("usr_Status"));
+				usuario.setTelefone(rSet.getString("usr_Telefone"));
+				usuario.setDtCadastro(rSet.getDate("dtCadastro"));				
+				
+				System.out.println(pstm);
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+		}
+		
+		return usuario;
+	
+	}
+	
+	@Test
+	public void test() throws SQLException{
+		
+		Usuario usuario  =  new Usuario();
+		usuario =  buscarPorCodigo(8L);
+		usuario .setNome("Joao");
+		Editar(usuario);
+		
+	}
 }
