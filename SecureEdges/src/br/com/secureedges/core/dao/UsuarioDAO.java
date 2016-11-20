@@ -34,7 +34,7 @@ public class UsuarioDAO implements IDAO {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("INSERT INTO db_tenoriogames.tb_usuario(usr_Codigo,usr_CPF,usr_Console,usr_Email,");
+		sql.append("INSERT INTO db_secureedges.tb_usuario(usr_Codigo,usr_CPF,usr_Console,usr_Email,");
 		sql.append("end_Bairro,end_CEP,");
 		sql.append("end_Cidade,end_Estado,end_Numero,end_Rua,");
 		sql.append("usr_Idade,usr_Nome,usr_RG,usr_Senha,usr_Sexo,usr_Sobrenome,usr_Status,usr_Telefone,dtCadastro)");
@@ -87,7 +87,7 @@ public class UsuarioDAO implements IDAO {
 	
 	public List<EntidadeDominio> listar() {
 		StringBuffer sql = new StringBuffer(); 
-		sql.append("SELECT * FROM db_tenoriogames.tb_usuario;");			
+		sql.append("SELECT * FROM db_secureedges.tb_usuario;");			
 		List<EntidadeDominio> lista = new ArrayList<EntidadeDominio>();
 		
 		Connection con = Conexao.getConnection();
@@ -137,7 +137,7 @@ public class UsuarioDAO implements IDAO {
 	
 	public Usuario buscarPorCodigo(Long codigo) {
 		StringBuffer sql = new StringBuffer(); 
-		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append("SELECT * FROM db_secureedges.tb_usuario");
 		sql.append(" where tb_usuario.usr_Codigo =?");
 		
 		
@@ -197,7 +197,7 @@ public class UsuarioDAO implements IDAO {
 		usuario = (Usuario) entidade;
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("delete from db_tenoriogames.tb_usuario where usr_Codigo = ?");
+		sql.append("delete from db_secureedges.tb_usuario where usr_Codigo = ?");
 		
 		Connection con = Conexao.getConnection();
 		
@@ -230,7 +230,7 @@ public class UsuarioDAO implements IDAO {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("UPDATE db_tenoriogames.tb_usuario set usr_Codigo=?, usr_CPF=?, usr_Console =? , usr_Email = ?, ");
+		sql.append("UPDATE db_secureedges.tb_usuario set usr_Codigo=?, usr_CPF=?, usr_Console =? , usr_Email = ?, ");
 		sql.append("end_Bairro = ? ,end_CEP = ?, ");
 		sql.append("end_Cidade = ?, end_Estado = ? , end_Numero = ? , end_Rua = ? , ");
 		sql.append("usr_Idade = ?, usr_Nome = ? ,usr_RG = ? ,usr_Senha= ? , usr_Sexo= ? , usr_Sobrenome = ? , usr_Status = ? , usr_Telefone = ?, dtCadastro = ? ");
@@ -278,7 +278,7 @@ public class UsuarioDAO implements IDAO {
 	
 	public Usuario autenticar (String cpf, String senha){
 		StringBuffer sql = new StringBuffer(); 
-		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append("SELECT * FROM db_secureedges.tb_usuario");
 		sql.append(" WHERE tb_usuario.usr_CPF = ? AND tb_usuario.usr_Senha= ?");
 		
 		Usuario usuario = new  Usuario();
@@ -333,7 +333,7 @@ public class UsuarioDAO implements IDAO {
 
 	public EntidadeDominio consultar(EntidadeDominio entidade) {
 		StringBuffer sql = new StringBuffer(); 
-		sql.append("SELECT * FROM db_tenoriogames.tb_usuario");
+		sql.append("SELECT * FROM db_secureedges.tb_usuario");
 		sql.append(" where tb_usuario.usr_CPF=?");
 		Usuario usuarioRecebe =  (Usuario) entidade;
 		

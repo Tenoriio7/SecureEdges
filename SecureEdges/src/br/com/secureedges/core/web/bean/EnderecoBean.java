@@ -1,4 +1,4 @@
-package br.com.secureedges.bean;
+package br.com.secureedges.core.web.bean;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;

@@ -1,5 +1,6 @@
-package br.com.secureedges.bean;
+package br.com.secureedges.core.web.bean;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -8,13 +9,14 @@ import javax.faces.bean.ViewScoped;
 import br.com.secureedges.core.dao.ComodoDAO;
 import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
 import br.com.secureedges.domain.Comodo;
+import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean
 @ViewScoped
 public class ComodoBean {
 	private Comodo comodo;
-	List<Comodo> listaComodos;
+	List<EntidadeDominio> listaComodos;
 	List<Comodo> listaComodosFiltrados;
 
 	public Comodo getComodo() {
@@ -27,11 +29,11 @@ public class ComodoBean {
 		this.comodo = comodo;
 	}
 
-	public List<Comodo> getListaComodos() {
+	public List<EntidadeDominio> getListaComodos() {
 		return listaComodos;
 	}
 
-	public void setListaComodos(List<Comodo> listaComodos) {
+	public void setListaComodos(List<EntidadeDominio> listaComodos) {
 		this.listaComodos = listaComodos;
 	}
 
@@ -43,11 +45,11 @@ public class ComodoBean {
 		this.listaComodosFiltrados = listaComodosFiltrados;
 	}
 
-	public void salvar() {
+	public void salvar() throws SQLException {
 		FacesUtil.adicionarMSGInfo("Salvo com Sucesso");
 		FacesUtil.adicionarMSGInfo(comodo.toString());
 		ComodoDAO comodoDAO = new ComodoDAO();
-		comodoDAO.salvar(comodo);
+		comodoDAO.Salvar(comodo);
 
 	}
 

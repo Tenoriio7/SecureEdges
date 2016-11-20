@@ -55,7 +55,6 @@ public class SolicitacaoDAO implements IDAO {
 			codigo = (long) rset.getInt(1);
 
 		}
-
 		codigo = Long.parseLong(codigo.toString());
 		return codigo;
 

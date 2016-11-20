@@ -1,12 +1,14 @@
-package br.com.secureedges.bean;
+package br.com.secureedges.core.web.bean;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.util.FacesUtil;
 
@@ -14,7 +16,7 @@ import br.com.secureedges.util.FacesUtil;
 @ViewScoped
 public class TipoDispositivoBean {
 	private Tipo_Dispositivo tpDispositivo;
-	List<Tipo_Dispositivo>listatpDispositivo;
+	List<EntidadeDominio> listatpDispositivo;
 	List<Tipo_Dispositivo>listatpDispositivoFiltrados;
 	
 	public Tipo_Dispositivo getTpDispositivo() {
@@ -25,10 +27,10 @@ public class TipoDispositivoBean {
 	public void setTpDispositivo(Tipo_Dispositivo tpDispositivo) {
 		this.tpDispositivo = tpDispositivo;
 	}
-	public List<Tipo_Dispositivo> getListatpDispositivo() {
+	public List<EntidadeDominio> getListatpDispositivo() {
 		return listatpDispositivo;
 	}
-	public void setListatpDispositivo(List<Tipo_Dispositivo> listatpDispositivo) {
+	public void setListatpDispositivo(List<EntidadeDominio> listatpDispositivo) {
 		this.listatpDispositivo = listatpDispositivo;
 	}
 	public List<Tipo_Dispositivo> getListatpDispositivoFiltrados() {
@@ -38,11 +40,11 @@ public class TipoDispositivoBean {
 		this.listatpDispositivoFiltrados = listatpDispositivoFiltrados;
 	}
 	
-	public void salvar() {
+	public void salvar() throws SQLException {
 				FacesUtil.adicionarMSGInfo("Salvo com Sucesso");
 				FacesUtil.adicionarMSGInfo(tpDispositivo.toString());
 				Tipo_DispositivoDAO tpDispositivoDAO = new Tipo_DispositivoDAO();
-				tpDispositivoDAO.salvar(tpDispositivo);
+				tpDispositivoDAO.Salvar(tpDispositivo);
 		
 	}
 	

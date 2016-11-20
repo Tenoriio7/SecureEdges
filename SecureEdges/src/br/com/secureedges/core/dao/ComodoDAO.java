@@ -44,9 +44,13 @@ public class ComodoDAO implements IDAO{
 			e.printStackTrace();
 			FacesUtil.adicionarMSGError(e.getMessage());
 		}
-		
+		Long retorno = null;
 		ResultSet rset =  pstm.getGeneratedKeys();
-		return rset.getLong(1);
+		while(rset.next()){
+			rset.getInt(1);
+			retorno=(long) rset.getInt(1);
+		}
+		return retorno;
 
 	}
 

@@ -1,4 +1,4 @@
-package br.com.secureedges.bean;
+package br.com.secureedges.core.web.bean;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -25,9 +25,9 @@ public class AutenticacaoBean {
 	public String  autenticar(){
 		try {
 			UsuarioDAO usuarioDAO = new UsuarioDAO();
-			usuarioLogado=usuarioDAO.autenticar(usuarioLogado.getCPF(), usuarioLogado.getLogin().getSenha());
+			usuarioLogado=usuarioDAO.autenticar(usuarioLogado.getCPF(), usuarioLogado.getSenha());
 			System.out.println(usuarioLogado.getCPF());
-			System.out.println(usuarioLogado.getLogin().getSenha());
+			System.out.println(usuarioLogado.getSenha());
 			if(usuarioLogado == null){
 				FacesUtil.adicionarMSGError("CPF ou Senha invalidos" );
 				return null;

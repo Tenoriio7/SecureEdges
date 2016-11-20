@@ -1,5 +1,6 @@
-package br.com.secureedges.bean;
+package br.com.secureedges.core.web.bean;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import br.com.secureedges.core.dao.DispositivoDAO;
 import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.dao.UsuarioDAO;
 import br.com.secureedges.domain.Dispositivo;
+import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Solicitacao;
 import br.com.secureedges.domain.Usuario;
 import br.com.secureedges.util.FacesUtil;
@@ -18,8 +20,8 @@ import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean
 @ViewScoped
-public class solicitacaoBean {
-	List<Dispositivo> listaDispositivos;
+public class SolicitacaoBean {
+	List<EntidadeDominio> listaDispositivos;
 	List<Dispositivo> listaDispositivosFiltrados;
 	private Solicitacao solicitacaoCadastro;
 	// pegando o valor que esta no AutenticacaoBean passando para a variavel local o valor do bean
@@ -36,11 +38,11 @@ public class solicitacaoBean {
 		this.solicitacaoCadastro = solicitacaoCadastro;
 	}
 		
-	public List<Dispositivo> getlistaDispositivos() {
+	public List<EntidadeDominio> getlistaDispositivos() {
 		
 		return listaDispositivos;
 	}
-	public void setlistaDispositivos(List<Dispositivo> listaDispositivos) {
+	public void setlistaDispositivos(List<EntidadeDominio> listaDispositivos) {
 		this.listaDispositivos = listaDispositivos;
 	}
 	public List<Dispositivo> getlistaDispositivosFiltrados() {
@@ -76,7 +78,7 @@ public class solicitacaoBean {
 		
 	
 		solicitacaoCadastro.setDispositivo(dispositivo);
-		solicitacaoCadastro.setStatus(false);
+		solicitacaoCadastro.setStatus("nova");
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		solicitacaoCadastro.setUsuario(usuarioDAO.buscarPorCodigo(1L));
 	}
@@ -84,20 +86,20 @@ public class solicitacaoBean {
 	public void remover (Dispositivo dispositivo)
 	{
 		solicitacaoCadastro.setDispositivo(null);
-		solicitacaoCadastro.setStatus(false);
+		solicitacaoCadastro.setStatus("reprovada");
 		solicitacaoCadastro.setUsuario(null);
 			
 		
 	}
 	
-	public void carregarDadosSolicitacao( ){
+	public void carregarDadosSolicitacao( ) throws SQLException{
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		Usuario usuario;
 		SolicitacaoDAO SolicitacaoDAO = new SolicitacaoDAO();
 		solicitacaoCadastro=new Solicitacao();
 		usuario=usuarioDAO.buscarPorCodigo(AutenticacaoBean.getUsuarioLogado().getCodigo());
 		solicitacaoCadastro.setUsuario(usuario);
-		SolicitacaoDAO.salvar(solicitacaoCadastro);		
+		SolicitacaoDAO.Salvar(solicitacaoCadastro);		
 	}
 	
 	public void  salvar(Dispositivo dispositivo){
