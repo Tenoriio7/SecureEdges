@@ -27,7 +27,7 @@ public class SolicitacaoDAO implements IDAO {
 		StringBuffer sql = new StringBuffer();
 
 		sql.append(
-				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Dispositivo_disp_Codigo,sol_data");
+				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Comodo_cmdo_Codigo,sol_data");
 		sql.append(" VALUES (?,?,?,?,?)");
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),

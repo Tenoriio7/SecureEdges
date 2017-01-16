@@ -6,6 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
  <ui:composition template="/templates/modeloGeral.xhtml">
+ <p:layout>
 	<ui:define name="conteudo">
 		<!-- para inserir toolbar deve se ter o facet -->
 		<p:toolbar>
@@ -22,9 +23,6 @@
 			<h:inputText maxlength="50" size="30" value="#{comodoBean.comodo.descricao}"/>
 			
 			</h:panelGrid>
-
-			
-			
 			<h:panelGrid columns="3">
 			<p:commandButton value="Limpar" action="/Pages/comodoBeanCadastro.xhtml?faces-redirect=true"></p:commandButton>
 			<p:commandButton value="Salvar" actionListener="#{comodoBean.salvar}"  update=":msgGlobal"></p:commandButton>
@@ -33,6 +31,7 @@
 			</h:panelGrid>
 		</h:form>
 	</ui:define>
+</p:layout>
  </ui:composition>
  
 </html>

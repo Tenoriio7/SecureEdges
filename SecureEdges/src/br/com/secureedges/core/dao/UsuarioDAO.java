@@ -34,7 +34,7 @@ public class UsuarioDAO implements IDAO {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("INSERT INTO db_secureedges.tb_usuario(usr_Codigo,usr_CPF,usr_Console,usr_Email,");
+		sql.append("INSERT INTO db_secureedges.tb_usuario(usr_Codigo,usr_CPF,usr_Email,");
 		sql.append("end_Bairro,end_CEP,");
 		sql.append("end_Cidade,end_Estado,end_Numero,end_Rua,");
 		sql.append("usr_Idade,usr_Nome,usr_RG,usr_Senha,usr_Sexo,usr_Sobrenome,usr_Status,usr_Telefone,dtCadastro)");
