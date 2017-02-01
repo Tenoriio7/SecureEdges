@@ -5,56 +5,70 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-<ui:composition template="/templates/modeloGeral.xhtml">
-	<ui:define name="metadata">
+ <ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadate">
 		<f:metadata>
-			<!-- f:event serve para chamar metodos do controlador por situação
-		listener evento type  o que ocorre 
-		preRenderView toda vez que for carregada -->
-			<f:event listener="#{comodoBean.carregar}" type="preRenderView" />
-
-
+			<f:event listener="#{comodoBean.carregarPesquisa}" type="preRenderView"></f:event>
 		</f:metadata>
 	</ui:define>
+ 	
 	<ui:define name="conteudo">
-
-		<!-- f:event serve para chamar metodos do controlador por situação
-		listener evento type  o que ocorre 
-		preRenderView toda vez que for carregada -->
-		<f:event listener="#{comodoBean.carregar}" type="preRenderView" />
-		<h:form>
+		<h:form id="formcomodo">
 			<!-- columns="4"  dois por linha no painelGrid -->
-			<!--  value  todos / filter  somente  filtrados  //
-			 var aponta o fabricante  corrente(cursor) 
-			 footer rodapé-->
 			<p:toolbar>
 				<f:facet name="left">
-					<h:outputText value="Comodo"></h:outputText>
+				<h:outputText value="Comodo"></h:outputText>
 				</f:facet>
 			</p:toolbar>
 
-
+			
+			<!--  value  todos / filter  somente  filtrados  //
+			 var aponta o fabricante  corrente(cursor) 
+			 footer rodapé-->
 
 
 			<p:dataTable emptyMessage="Nenhum Registro Encontrado."
 				value="#{comodoBean.listaComodos}"
-				filteredValue="#{comodoBean.listaComodosFiltrados}" var="comodo"
-				paginator="true">
+				filteredValue="#{comodoBean.listaComodosFiltrados}"
+				var="comodo" paginator="true"
+				id="dtcomodo">
 				<f:facet name="footer">
-					<h:commandButton value="Novo"
-						action="/Pages/comodoCadastro.xhtml?faces-redirect=true" />
+					<p:button value="Novo"
+						outcome="/Pages/comodo/comodoCadastro.xhtml?faces-redirect=true"
+						id="btnovo">
+						<f:param name="cmdAcao" value="Salvar"/>
+					</p:button>
 				</f:facet>
 
-				<p:column headerText="Codigo:">
-					<h:outputText value="#{comodo.codigo}" />
+				<!-- filterBy="" filtrar  sortBy="" ordenar -->
+				<p:column headerText="Codigo">
+					<h:outputText value="#{comodo.codigo}"></h:outputText>
 				</p:column>
-				<p:column headerText="Descrição:" filterBy="#{comodo.descricao}"
+				<p:column headerText="Descricao" filterBy="#{comodo.descricao}"
 					sortBy="#{comodo.descricao}">
-					<h:outputText value="#{comodo.descricao}" />
+					<h:outputText value="#{comodo.descricao}"></h:outputText>
 				</p:column>
+
+				<p:column headerText="Opções">
+					<p:button value="Excluir"
+					id="btExcluir"
+						outcome="/Pages/comodo/comodoCadastro.xhtml?faces-redirect=true">
+						<f:param name="cmdAcao" value="Excluir"/>
+						<f:param name="cmdCod" value="#{comodo.codigo}"/>
+					</p:button>
+
+					<p:button value="Editar"
+						outcome="/Pages/comodo/comodoCadastro.xhtml?faces-redirect=true">
+						<f:param name="cmdAcao" value="Editar"/>
+						<f:param name="cmdCod" value="#{comodo.codigo}"/>
+					</p:button>
+
+
+				</p:column>
+
 			</p:dataTable>
 		</h:form>
 	</ui:define>
-</ui:composition>
-
+ </ui:composition>
+ 
 </html>

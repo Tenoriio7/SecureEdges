@@ -18,12 +18,13 @@
 	<p:growl id="msgGlobal" />
 	<p:layout fullPage="true">
 
-		<p:layoutUnit position="north" size="100" header="Secure Edges"
+		<p:layoutUnit position="north" size="100" header="TenorioGames"
 			resizable="false" closable="false" collapsible="false">
 
 			<h:form id="frmMenuSuperior">
 				<p:tabMenu rendered="true" activeIndex="-1">
 					<p:menuitem value="Sair"
+						
 						action="#{autenticacaoBean.sair}">
 					</p:menuitem>
 					<p:menuitem value="Graficos">
@@ -50,15 +51,20 @@
 			<h:form id="frmMenuPrincipal">
 				<p:panelMenu id="pnlMenuPrincipal">
 					<p:submenu label="Cadastros" id="lbl">
-						<p:menuitem value="Comodo"
-							outcome="/Pages/comodo/comodoPesquisa.xhtml" />
-						<p:menuitem value="Dispositivo"
-							outcome="/Pages/solicitacao/solicitacaoPesquisa.xhtml" />
+						<p:menuitem value="Tipo Dispositivo"
+							outcome="/Pages/tp_dispositivo/tipoDispositivoPesquisa.xhtml" />
+						<p:menuitem value="Dispositivos"
+							outcome="/Pages/dispositivo/dispositivoPesquisa.xhtml" />
 						<p:menuitem value="Usuários"
 							outcome="/Pages/usuario/usuarioPesquisa.xhtml" />
-						<p:menuitem value="Genero"
-							outcome="/Pages/tp_dispositivo/tipoDispositivoPesquisa.xhtml" />
+						<p:menuitem value="Comodos"
+							outcome="/Pages/comodo/comodoPesquisa.xhtml" />
 					</p:submenu>
+					<p:submenu label="Solicitações">
+						<p:menuitem value="Visualizar Todas"
+							 />
+					</p:submenu>
+					
 
 				</p:panelMenu>
 			</h:form>
