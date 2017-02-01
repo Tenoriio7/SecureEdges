@@ -6,30 +6,41 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
  <ui:composition template="/templates/modeloGeral.xhtml">
+ 		<ui:define name="metadate">
+		<f:metadata>
+			
+			<f:viewParam name="tpAcao" value="#{tipoDispositivoBean.acao}"/>
+			<f:viewParam name="tpCod" value="#{tipoDispositivoBean.codigo}"/>
+			<f:event listener="#{tipoDispositivoBean.carregarCadastro}" type="preRenderView"></f:event>
+		</f:metadata>
+	</ui:define> 
 	<ui:define name="conteudo">
 		<!-- para inserir toolbar deve se ter o facet -->
 		<p:toolbar>
 				<f:facet name="left">
-				<h:outputText value="Tipo de Dispositivo."></h:outputText>
+				<h:outputText value="Genero"></h:outputText>
 				</f:facet>
 		</p:toolbar>
-		<h:form>
-			<h:panelGrid columns="2">
+		<h:form id="frmFabCad">
+			
+			<h:panelGrid columns="2" id="pnlFabCadDados">
 			<h:outputLabel value="Código:"></h:outputLabel>
-			<h:inputText maxlength="20" size="10" readonly="true" value="#{tipoDispositivoBean.tpDispositivo.codigo}"/>
+			<h:inputText maxlength="20" size="10" readonly="true" value="#{tipoDispositivoBean.tipo_DispositivoCadastro.codigo}"/>
+			<h:outputLabel value="Descrição:"></h:outputLabel>
+			<h:inputText maxlength="50" size="30" value="#{tipoDispositivoBean.tipo_DispositivoCadastro.descricao}"
+			id="txtdescricao"/>
+			</h:panelGrid>			
+			<h:panelGrid columns="6">
+			<p:commandButton value="Limpar" actionListener="#{tipoDispositivoBean.novo}" update=":frmFabCad:pnlFabCadDados"></p:commandButton>
+			<!-- propriedade update serve para informar quem será atualizadovia ajax (id  do growl :msgglobal em template-->
+			<p:commandButton id="btsalvar" value="Salvar" actionListener="#{tipoDispositivoBean.salvar}" update=":msgGlobal :frmFabCad:pnlFabCadDados"
+			rendered="#{tipoDispositivoBean.acao == 'Salvar'}"/>
+			<p:commandButton value="Editar" actionListener="#{tipoDispositivoBean.editar}" update=":msgGlobal :frmFabCad:pnlFabCadDados"
+			rendered="#{tipoDispositivoBean.acao == 'Editar'}"/>
+			<p:commandButton value="Excluir"  id="btExcluir" actionListener="#{tipoDispositivoBean.excluir}" update=":msgGlobal :frmFabCad:pnlFabCadDados"
+			rendered="#{tipoDispositivoBean.acao == 'Excluir'}"/>
 			
-			<h:outputLabel value="Genero"></h:outputLabel>
-			<h:inputText maxlength="50" size="30" value="#{tipoDispositivoBean.tpDispositivo.genero}"/>
-			
-			</h:panelGrid>
-
-			
-			
-			<h:panelGrid columns="3">
-			<p:commandButton value="Limpar" action="/Pages/tipoDispositivocadastro.xhtml?faces-redirect=true"></p:commandButton>
-			<p:commandButton value="Salvar" actionListener="#{tipoDispositivoBean.salvar}"  update=":msgGlobal"></p:commandButton>
-			<p:commandButton value="Voltar" action="/Pages/tipoDispositivoPesquisa.xhtml?faces-redirect=true">
-			</p:commandButton>
+			<p:commandButton value="Consultar" action="/Pages/comodo/comodoPesquisa.xhtml?faces-redirect=true"></p:commandButton>
 			</h:panelGrid>
 		</h:form>
 	</ui:define>

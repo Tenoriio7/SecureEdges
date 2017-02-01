@@ -57,6 +57,7 @@ public class Fachada implements IFachada {
 		daos.put(Dispositivo.class.getName(), (IDAO) dispositivoDAO);
 		daos.put(Solicitacao.class.getName(), (IDAO) solicitacaoDAO);
 		daos.put(Tipo_Dispositivo.class.getName(), (IDAO) tipo_DispositivoDAO);
+		daos.put(Usuario.class.getName(), (IDAO) usuarioDAO);
 
 		/* Criando instâncias de regras de negócio a serem utilizados */
 //		ValidadorDadosObrigatoriosFornecedor vrDadosObrigatoriosFornecedor = new ValidadorDadosObrigatoriosFornecedor();

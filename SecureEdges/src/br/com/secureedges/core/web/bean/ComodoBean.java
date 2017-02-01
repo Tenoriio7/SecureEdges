@@ -14,6 +14,7 @@ import br.com.secureedges.core.web.impl.AlterarCommand;
 import br.com.secureedges.core.web.impl.ExcluirCommand;
 import br.com.secureedges.core.web.impl.SalvarCommand;
 import br.com.secureedges.domain.EntidadeDominio;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.domain.Comodo;
 
 @ManagedBean
@@ -114,11 +115,12 @@ public class ComodoBean extends EntidadeDominio {
 	
 	public void carregarCadastro(){
 		try{
-			String valor = FacesUtil.getParam("cmdAcao");
+			String valor = FacesUtil.getParam("cmdCod");
 			if(valor != null)
 			{
 				Long codigo = Long.parseLong(valor);
 				ComodoCadastro=(Comodo) Fachada.buscarGenerico(codigo, new Comodo());
+				System.out.println(ComodoCadastro.getDescricao());
 			}
 		
 		} catch(RuntimeException ex){

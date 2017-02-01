@@ -8,9 +8,10 @@
  <ui:composition template="/templates/modeloGeral.xhtml">
  		<ui:define name="metadate">
 		<f:metadata>
-			<f:event listener="#{comodoBean.carregarCadastro}" type="preRenderView"></f:event>
+			
 			<f:viewParam name="cmdAcao" value="#{comodoBean.acao}"/>
 			<f:viewParam name="cmdCod" value="#{comodoBean.codigo}"/>
+			<f:event listener="#{comodoBean.carregarCadastro}" type="preRenderView"></f:event>
 		</f:metadata>
 	</ui:define> 
 	<ui:define name="conteudo">
