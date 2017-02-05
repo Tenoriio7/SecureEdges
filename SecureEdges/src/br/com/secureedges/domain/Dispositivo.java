@@ -22,11 +22,6 @@ import javax.persistence.Table;
 public class Dispositivo extends EntidadeDominio {
 	
 	
-	@Id
-	@GeneratedValue
-	@Column(name="disp_Codigo")
-	Long Codigo;
-	
 	@Column(name="disp_Descricao",nullable=false,length=50)
 	String descricao;
 	
@@ -38,13 +33,15 @@ public class Dispositivo extends EntidadeDominio {
 	@JoinColumn(name = "tb_TP_Dispositivo_tp_disp_Codigo", referencedColumnName = "tp_disp_Codigo", nullable = false)
 	private Tipo_Dispositivo TP_Dispositivo;
 
-	public Long getCodigo() {
-		return Codigo;
+	private String status;
+	
+	public String getStatus() {
+		return status;
 	}
-
-	public void setCodigo(Long codigo) {
-		Codigo = codigo;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+	
 
 	public String getDescricao() {
 		return descricao;
@@ -66,11 +63,7 @@ public class Dispositivo extends EntidadeDominio {
 		
 	}
 
-	@Override
-	public String toString() {
-		return "Dispositivo [Codigo=" + Codigo + ", descricao=" + descricao + ", Comodo=" + Comodo + ", TP_Dispositivo="
-				+ TP_Dispositivo + "]";
-	}
+	
 
 	public Tipo_Dispositivo getTP_Dispositivo() {
 		if (TP_Dispositivo ==null)
@@ -82,30 +75,7 @@ public class Dispositivo extends EntidadeDominio {
 		TP_Dispositivo = tP_Dispositivo;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((Codigo == null) ? 0 : Codigo.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Dispositivo other = (Dispositivo) obj;
-		if (Codigo == null) {
-			if (other.Codigo != null)
-				return false;
-		} else if (!Codigo.equals(other.Codigo))
-			return false;
-		return true;
-	}
 
 	
 	
