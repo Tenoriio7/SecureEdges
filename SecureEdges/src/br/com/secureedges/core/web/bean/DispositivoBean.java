@@ -55,7 +55,7 @@ public class DispositivoBean  extends EntidadeDominio {
 	public List<EntidadeDominio> getListaComodos() {
 		return listaComodos;
 	}
-	public void setListaComodoes(List<EntidadeDominio> listaComodos) {
+	public void setListaComodos(List<EntidadeDominio> listaComodos) {
 		this.listaComodos = listaComodos;
 	}
 	
