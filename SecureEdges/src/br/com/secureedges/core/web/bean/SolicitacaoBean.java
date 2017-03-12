@@ -43,6 +43,7 @@ public class SolicitacaoBean {
 	private Fachada Fachada = new Fachada();
 
 
+
 	public BigDecimal getValorFrete() {
 
 		return valorFrete;
@@ -78,6 +79,8 @@ public class SolicitacaoBean {
 	}
 
 	public List<EntidadeDominio> getListaDispositivos() {
+		if (listaDispositivos == null)
+				listaDispositivos =  new ArrayList<>();
 		return listaDispositivos;
 	}
 
@@ -94,7 +97,6 @@ public class SolicitacaoBean {
 		commands.put("Salvar", new SalvarCommand());
 		commands.put("Editar", new AlterarCommand());
 		try {
-			listaDispositivos = Fachada.listar(new Dispositivo());
 			
 
 		} catch (RuntimeException ex) {
@@ -113,20 +115,36 @@ public class SolicitacaoBean {
 				solicitacaoCadastro = new Solicitacao();
 		return solicitacaoCadastro;
 	}
-	public List<Item> getListaItens() {
-		return listaItens;
-	}
-	public void setListaItens(List<Item> listaItens) {
-		this.listaItens = listaItens;
-	}
 
+	public void salvar()
+	{
+		try
+		{
+			//Obtêm o command para executar a respectiva operação
+			ICommand command = commands.get(acao);
+			/*Executa o command que chamará a fachada para executar a operação requisitada
+			 * o retorno é uma instância da classe resultado que pode conter mensagens derro 
+			 * ou entidades de retorno*/
+			command.execute(solicitacaoCadastro);
+			solicitacaoCadastro = new Solicitacao();
+			
+		}catch(RuntimeException ex)
+		{
+			
+			FacesUtil.adicionarMSGError("Erro ao tentar incluir:"+ex.getMessage());
+			
+		}
+		
+	}
+	
+	
 	public void carregarDispositivos() {
 		List<EntidadeDominio> listaRecebe = new ArrayList<>();
 		listaRecebe = Fachada.listar(new Dispositivo());
-		System.out.println(listaRecebe.size());
-		System.out.println("aqui");
 		ComodoDAO comodoDAO = new ComodoDAO();
 		Tipo_DispositivoDAO tipo_DispositivoDAO = new Tipo_DispositivoDAO();
+		System.out.println(listaRecebe.size());
+		listaDispositivos =   new ArrayList<>();
 		for (EntidadeDominio dispositivoList : listaRecebe) {
 			if (dispositivoList instanceof Dispositivo) {
 				 Long  codigoComodo = ((Dispositivo) dispositivoList).getComodo().getCodigo();
@@ -140,7 +158,15 @@ public class SolicitacaoBean {
 			
 		}
 	}
-	
+	public List<Item> getListaItens() {
+		if (listaItens == null)
+			listaItens = new ArrayList<>();
+		return listaItens;
+	}
+
+	public void setListaItens(List<Item> listaItens) {
+		this.listaItens = listaItens;
+	}
 	public void adicionar(Dispositivo produto) {
 		int posicaoEncontrada = -1; // começa -1 pra ser nenhuma posição
 		Dispositivo produtoTemp = null;
