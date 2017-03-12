@@ -63,7 +63,6 @@ public class Dispositivo extends EntidadeDominio {
 		
 	}
 
-	
 
 	public Tipo_Dispositivo getTP_Dispositivo() {
 		if (TP_Dispositivo ==null)

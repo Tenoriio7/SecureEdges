@@ -6,12 +6,21 @@ public class Solicitacao extends EntidadeDominio {
 
 	private String status;
 	
+	private String descricao;
+	
+	public String getDescricao() {
+		return descricao;
+	}
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
 	private Usuario usuario;
 	
 	private Date horario;
 	
 	
-	private Dispositivo dispositivo;
+	private Dispositivo dispositivo ;
 
 
 	
@@ -48,6 +57,8 @@ public class Solicitacao extends EntidadeDominio {
 
 
 	public Dispositivo getDispositivo() {
+		if (dispositivo ==null)
+			dispositivo=  new Dispositivo();
 		return dispositivo;
 	}
 

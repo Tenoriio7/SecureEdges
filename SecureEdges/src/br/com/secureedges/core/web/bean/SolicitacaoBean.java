@@ -1,119 +1,191 @@
 package br.com.secureedges.core.web.bean;
+
 import java.math.BigDecimal;
-import java.sql.SQLException;
+import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import br.com.secureedges.core.dao.DispositivoDAO;
-import br.com.secureedges.core.dao.SolicitacaoDAO;
-import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
+import br.com.secureedges.core.impl.controle.Fachada;
+import br.com.secureedges.core.web.command.ICommand;
+import br.com.secureedges.core.web.impl.AlterarCommand;
+import br.com.secureedges.core.web.impl.SalvarCommand;
+import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
+import br.com.secureedges.domain.Item;
 import br.com.secureedges.domain.Solicitacao;
-import br.com.secureedges.domain.Usuario;
+import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.util.FacesUtil;
-
 
 @ManagedBean
 @ViewScoped
 public class SolicitacaoBean {
-	List<EntidadeDominio> listaDispositivos;
+	public List<EntidadeDominio> listaDispositivos;
 	List<Dispositivo> listaDispositivosFiltrados;
+	private List<Item> listaItens;
 	private Solicitacao solicitacaoCadastro;
-	// pegando o valor que esta no AutenticacaoBean passando para a variavel local o valor do bean
-	@ManagedProperty(value="#{AutenticacaoBean}")
-	private AutenticacaoBean AutenticacaoBean;
+	private static Map<String, ICommand> commands;
+	// pegando o valor que esta no autenticacaoBean passando para a variavel
+	// local o valor do bean
+	@ManagedProperty(value = "#{autenticacaoBean}")
+	private AutenticacaoBean autenticacaoBean =  new AutenticacaoBean();
+	public List<EntidadeDominio> bkplistaDispositivos;
+	private String acao;
+	private BigDecimal valorFrete = new BigDecimal("0.0000");
+	private Fachada Fachada = new Fachada();
 
-	public Solicitacao getsolicitacaoCadastro() {
-		if(solicitacaoCadastro==null){
-			solicitacaoCadastro = new Solicitacao();
-		}	
-		return solicitacaoCadastro;
+
+	public BigDecimal getValorFrete() {
+
+		return valorFrete;
 	}
-	public void setsolicitacaoCadastro(Solicitacao solicitacaoCadastro) {
-		this.solicitacaoCadastro = solicitacaoCadastro;
+
+	public void setValorFrete(BigDecimal valorFrete) {
+		valorFrete = valorFrete.round(new MathContext(4));
+		this.valorFrete = valorFrete;
 	}
-		
-	public List<EntidadeDominio> getlistaDispositivos() {
-		
-		return listaDispositivos;
+
+	public String getAcao() {
+		return acao;
 	}
-	public void setlistaDispositivos(List<EntidadeDominio> listaDispositivos) {
-		this.listaDispositivos = listaDispositivos;
+
+	public void setAcao(String acao) {
+		this.acao = acao;
 	}
+
 	public List<Dispositivo> getlistaDispositivosFiltrados() {
-		
-
 		return listaDispositivosFiltrados;
 	}
+
 	public void setlistaDispositivosFiltrados(List<Dispositivo> listaDispositivosFiltrados) {
 		this.listaDispositivosFiltrados = listaDispositivosFiltrados;
 	}
+
 	public AutenticacaoBean getAutenticacaoBean() {
-		return AutenticacaoBean;
+		return autenticacaoBean;
 	}
-	public void setAutenticacaoBean(AutenticacaoBean AutenticacaoBean) {
-		this.AutenticacaoBean = AutenticacaoBean;
+
+	public void setAutenticacaoBean(AutenticacaoBean autenticacaoBean) {
+		this.autenticacaoBean = autenticacaoBean;
 	}
-	
-	public void carregarDispositivos()
-	{
-		try
-		{
-			DispositivoDAO dispositivoDAO = new DispositivoDAO();
-			listaDispositivos = dispositivoDAO.listar();			
-		}catch(RuntimeException ex)
-		{
-			
-			FacesUtil.adicionarMSGError("Erro ao tentar listar os  Produtos:"+ex.getMessage());
-			
-		}
+
+	public List<EntidadeDominio> getListaDispositivos() {
+		return listaDispositivos;
 	}
-	
-	public void adicionar(Dispositivo dispositivo){
-		
-	
-		solicitacaoCadastro.setDispositivo(dispositivo);
-		solicitacaoCadastro.setStatus("nova");
-		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		solicitacaoCadastro.setUsuario(usuarioDAO.buscarPorCodigo(1L));
+
+	public void setListaDispositivos(List<EntidadeDominio> listaDispositivos) {
+		this.listaDispositivos = listaDispositivos;
 	}
-	
-	public void remover (Dispositivo dispositivo)
-	{
-		solicitacaoCadastro.setDispositivo(null);
-		solicitacaoCadastro.setStatus("reprovada");
-		solicitacaoCadastro.setUsuario(null);
-			
-		
-	}
-	
-	public void carregarDadosSolicitacao( ) throws SQLException{
-		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		Usuario usuario;
-		SolicitacaoDAO SolicitacaoDAO = new SolicitacaoDAO();
-		solicitacaoCadastro=new Solicitacao();
-		usuario=usuarioDAO.buscarPorCodigo(AutenticacaoBean.getUsuarioLogado().getCodigo());
-		solicitacaoCadastro.setUsuario(usuario);
-		SolicitacaoDAO.Salvar(solicitacaoCadastro);		
-	}
-	
-	public void  salvar(Dispositivo dispositivo){
-		
+
+	public SolicitacaoBean() {
+		/*
+		 * Utilizando o command para chamar a fachada e indexando cada command
+		 * pela operação garantimos que esta servelt atenderá qualquer operação
+		 */
+		commands = new HashMap<String, ICommand>();
+		commands.put("Salvar", new SalvarCommand());
+		commands.put("Editar", new AlterarCommand());
 		try {
-			UsuarioDAO usuarioDAO = new UsuarioDAO();
-			Usuario usuario;
-			solicitacaoCadastro=new Solicitacao();
-			solicitacaoCadastro.setDispositivo(dispositivo);
-			usuario=usuarioDAO.buscarPorCodigo(AutenticacaoBean.getUsuarioLogado().getCodigo());
-			solicitacaoCadastro.setUsuario(usuario);
+			listaDispositivos = Fachada.listar(new Dispositivo());
 			
-		} catch (RuntimeException e) {
-			FacesUtil.adicionarMSGError("Erro ao Salvar Solicitacao:" +e.getMessage());
+
+		} catch (RuntimeException ex) {
+
+			FacesUtil.adicionarMSGError("Erro ao tentar listar os  Dispositivos:" + ex.getMessage());
+
 		}
 	}
+
+	public void setsolicitacaoCadastro(Solicitacao solicitacaoCadastro) {
+		this.solicitacaoCadastro = solicitacaoCadastro;
+	}
+	
+	public Solicitacao getSolicitacaoCadastro() {
+		if (solicitacaoCadastro ==  null)
+				solicitacaoCadastro = new Solicitacao();
+		return solicitacaoCadastro;
+	}
+	public List<Item> getListaItens() {
+		return listaItens;
+	}
+	public void setListaItens(List<Item> listaItens) {
+		this.listaItens = listaItens;
+	}
+
+	public void carregarDispositivos() {
+		List<EntidadeDominio> listaRecebe = new ArrayList<>();
+		listaRecebe = Fachada.listar(new Dispositivo());
+		System.out.println(listaRecebe.size());
+		System.out.println("aqui");
+		ComodoDAO comodoDAO = new ComodoDAO();
+		Tipo_DispositivoDAO tipo_DispositivoDAO = new Tipo_DispositivoDAO();
+		for (EntidadeDominio dispositivoList : listaRecebe) {
+			if (dispositivoList instanceof Dispositivo) {
+				 Long  codigoComodo = ((Dispositivo) dispositivoList).getComodo().getCodigo();
+				 Long  codigoTipo = ((Dispositivo) dispositivoList).getTP_Dispositivo().getCodigo();
+				 Comodo auxcmd = (Comodo) comodoDAO.buscarPorCodigo(codigoComodo);
+				 Tipo_Dispositivo auxTP = (Tipo_Dispositivo) tipo_DispositivoDAO.buscarPorCodigo(codigoTipo);
+				 ((Dispositivo) dispositivoList).setComodo(auxcmd);
+				 ((Dispositivo) dispositivoList).setTP_Dispositivo(auxTP);
+				listaDispositivos.add(dispositivoList);
+				}
+			
+		}
+	}
+	
+	public void adicionar(Dispositivo produto) {
+		int posicaoEncontrada = -1; // começa -1 pra ser nenhuma posição
+		Dispositivo produtoTemp = null;
+		
+		// verifica se o produto que irá ser adicionado ja esta na lista de itens
+		for (int pos = 0; pos < listaItens.size() && posicaoEncontrada < 0; pos++) {
+			Item itemTemp = listaItens.get(pos);
+
+			if (itemTemp.getDispositivo().equals(produto)) {
+				// ja encontrou o produto, pega a posição dele
+				posicaoEncontrada = pos;
+
+			}
+
+		}
+
+		for (Item item : listaItens) {
+			if (item.getDispositivo().equals(produto)) {
+				produtoTemp = new Dispositivo();
+				produtoTemp = item.getDispositivo();
+			}
+		}
+
+		Item item = new Item();
+		item.setDispositivo(produto);
+
+		// produto novo
+		if (posicaoEncontrada < 0) {
+			
+			// verifica se a quantidade vendida é viavel
+
+				listaItens.add(item);
+
+				}
+
+		// produto ja inserido na lista de itens
+		else {
+			Item itemTemp = listaItens.get(posicaoEncontrada);
+				listaItens.set(posicaoEncontrada, item);
+				listaItens.set(posicaoEncontrada, item);
+			
+		}
+
+	}
+
+	
+
 }
