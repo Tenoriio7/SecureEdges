@@ -318,6 +318,12 @@ public class UsuarioDAO implements IDAO {
 				
 			}
 			
+			if (rSet.next() ==false){
+				FacesUtil.adicionarMSGError("Usuario ou senha Invalidos");
+				usuario = null;
+			}
+			
+			
 			
 			
 		} catch (SQLException e) {
