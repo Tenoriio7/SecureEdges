@@ -145,6 +145,7 @@ public class SolicitacaoBean {
 		Tipo_DispositivoDAO tipo_DispositivoDAO = new Tipo_DispositivoDAO();
 		System.out.println(listaRecebe.size());
 		listaDispositivos =   new ArrayList<>();
+		System.out.println(autenticacaoBean.getUsuarioLogado().getNome());
 		for (EntidadeDominio dispositivoList : listaRecebe) {
 			if (dispositivoList instanceof Dispositivo) {
 				 Long  codigoComodo = ((Dispositivo) dispositivoList).getComodo().getCodigo();

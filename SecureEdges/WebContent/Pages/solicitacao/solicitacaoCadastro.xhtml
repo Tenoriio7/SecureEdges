@@ -42,7 +42,7 @@
 				</p:column>
 
 				<p:column headerText="Opções" style="width: 10%">
-					<p:button value="Selecionar" id="btEnviar" disabled="#{autenticacaoBean.usuarioLogado.nome != 'null'}"
+					<p:button value="Selecionar" id="btEnviar" disabled="#{autenticacaoBean.usuarioLogado.nome == 'null'}"
 						outcome="/Pages/solicitacao/solicitacaoDispositivo.xhtml?faces-redirect=true">
 						<f:param name="dispCod" value="#{dispositivo.codigo}" />
 						<f:param name="tpCod" value="#{dispositivo.comodo.codigo}" />

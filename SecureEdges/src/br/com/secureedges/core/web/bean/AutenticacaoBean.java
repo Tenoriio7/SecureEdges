@@ -11,7 +11,7 @@ import br.com.secureedges.domain.Usuario;
 @SessionScoped  // diferença :  ele vai existir durante todo tempo de sessão
 public class AutenticacaoBean {
 
-	private Usuario usuarioLogado= new Usuario();
+	private Usuario usuarioLogado;
 	
 	public Usuario getUsuarioLogado() {
 		if (usuarioLogado == null)
@@ -26,7 +26,7 @@ public class AutenticacaoBean {
 		try {
 			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			usuarioLogado=usuarioDAO.autenticar(usuarioLogado.getCPF(), usuarioLogado.getSenha());
-			System.out.println(usuarioLogado.getCPF());
+			
 			System.out.println(usuarioLogado.getSenha());
 			if(usuarioLogado == null){
 				FacesUtil.adicionarMSGError("CPF ou Senha invalidos" );
