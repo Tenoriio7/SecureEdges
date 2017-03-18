@@ -38,11 +38,11 @@
 				<h:panelGrid columns="2">
 					<h:outputLabel value="Código:"></h:outputLabel>
 					<h:inputText maxlength="20" size="10" disabled="true"
-						value="#{dispositivoBean.dispositivoCadastro.codigo}" />
+						value="#{solicitacaoBean.solicitacaoCadastro.codigo}" />
 
 					<h:outputLabel value="Descricao"></h:outputLabel>
 					<h:inputTextarea maxlength="100" size="1000"
-						value="#{dispositivoBean.dispositivoCadastro.descricao}"
+						value="#{solicitacaoBean.solicitacaoCadastro.descricao}"
 						disabled="#{dispositivoBean.acao == 'Excluir'}" />
 
 					<h:panelGrid columns="2">
@@ -54,7 +54,7 @@
 
 						<h:outputLabel value="Comodo"></h:outputLabel>
 						<p:selectOneMenu
-							value="#{dispositivoBean.dispositivoCadastro.comodo.codigo}"
+							value="#{solicitacaoBean.solicitacaoCadastro.dispositivo.comodo.codigo}"
 							disabled="#{dispositivoBean.acao== 'Excluir'}">
 							<f:selectItems value="#{dispositivoBean.listaComodos}"
 								var="genero" itemLabel="#{genero.descricao}"
@@ -65,7 +65,7 @@
 
 						<h:outputLabel value="Tipo"></h:outputLabel>
 						<p:selectOneMenu
-							value="#{dispositivoBean.dispositivoCadastro.TP_Dispositivo.codigo}"
+							value="#{solicitacaoBean.solicitacaoCadastro.dispositivo.TP_Dispositivo.codigo}"
 							disabled="#{dispositivoBean.acao== 'Excluir'}">
 							<f:selectItems value="#{dispositivoBean.listaTipo_Dispositivos}"
 								var="tp" itemLabel="#{tp.descricao}" itemValue="#{tp.codigo}" />

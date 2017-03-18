@@ -9,6 +9,21 @@ public class Solicitacao extends EntidadeDominio {
 	private String status;
 
 	private String descricao;
+	private Comodo comodo;
+	
+	public Comodo getComodo() {
+		if (comodo ==null)
+			comodo = new Comodo();
+		return comodo;
+	}
+	public void setComodo(Comodo comodo) {
+		this.comodo = comodo;
+	}
+	@Override
+	public Long getCodigo() {
+		// TODO Auto-generated method stub
+		return super.getCodigo();
+	}
 
 	public String getDescricao() {
 		return descricao;
@@ -25,6 +40,8 @@ public class Solicitacao extends EntidadeDominio {
 	private Dispositivo dispositivo;
 
 	public String getStatus() {
+		if (status == null)
+			status = "novo";
 		return status;
 	}
 
@@ -33,6 +50,8 @@ public class Solicitacao extends EntidadeDominio {
 	}
 
 	public Date getData() {
+		if (data == null)  
+				data = new Date() ;
 		return data;
 	}
 

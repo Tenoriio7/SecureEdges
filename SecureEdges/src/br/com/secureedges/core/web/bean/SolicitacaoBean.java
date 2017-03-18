@@ -120,6 +120,7 @@ public class SolicitacaoBean {
 	{
 		try
 		{
+			System.out.println(solicitacaoCadastro.getDescricao());
 			//Obtêm o command para executar a respectiva operação
 			ICommand command = commands.get(acao);
 			/*Executa o command que chamará a fachada para executar a operação requisitada
