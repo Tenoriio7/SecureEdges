@@ -65,7 +65,7 @@ public class SolicitacaoBean {
 	public List<Dispositivo> getlistaDispositivosFiltrados() {
 		return listaDispositivosFiltrados;
 	}
-
+//
 	public void setlistaDispositivosFiltrados(List<Dispositivo> listaDispositivosFiltrados) {
 		this.listaDispositivosFiltrados = listaDispositivosFiltrados;
 	}
