@@ -28,7 +28,7 @@ public class SolicitacaoDAO implements IDAO {
 		StringBuffer sql = new StringBuffer();
 
 		sql.append(
-				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Comodo_cmdo_Codigo,sol_descricao,sol_data,tb_Usuario_usr_Codigo");
+				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Comodo_cmdo_Codigo,sol_descricao,sol_data,tb_Usuario_usr_Codigo)");
 		sql.append(" VALUES (?,?,?,?,?,?,?)");
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),
@@ -37,14 +37,14 @@ public class SolicitacaoDAO implements IDAO {
 		try {
 			SimpleDateFormat stf = new SimpleDateFormat("yyyy/MM/dd");
 			String vendaHorario = stf.format(solicitacao.getData());
-
+			System.out.println(solicitacao.getData());
 			int i = 0;
 			pstm.setLong(++i, solicitacao.getCodigo());
 			pstm.setString(++i, solicitacao.getStatus());
 			pstm.setLong(++i, solicitacao.getDispositivo().getCodigo());
 			pstm.setLong(++i, solicitacao.getComodo().getCodigo());
 			pstm.setString(++i, solicitacao.getDescricao());
-			pstm.setDate(++i,(Date) solicitacao.getData());
+			pstm.setString(++i, vendaHorario);
 			pstm.setLong(++i, solicitacao.getUsuario().getCodigo());
 
 			pstm.executeUpdate();

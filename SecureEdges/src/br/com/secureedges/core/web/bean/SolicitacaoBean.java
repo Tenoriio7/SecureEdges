@@ -126,6 +126,7 @@ public class SolicitacaoBean {
 			/*Executa o command que chamará a fachada para executar a operação requisitada
 			 * o retorno é uma instância da classe resultado que pode conter mensagens derro 
 			 * ou entidades de retorno*/
+			solicitacaoCadastro.setUsuario(autenticacaoBean.getUsuarioLogado());
 			command.execute(solicitacaoCadastro);
 			solicitacaoCadastro = new Solicitacao();
 			
