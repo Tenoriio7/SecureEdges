@@ -24,9 +24,11 @@
 			<h:form id="frmMenuSuperior">
 				<p:tabMenu rendered="true" activeIndex="-1">
 					<p:menuitem value="Sair"
-						
-						action="#{autenticacaoBean.sair}">
+						rendered="#{autenticacaoBean.usuarioLogado.status != null}"
+						action="#{autenticacaoBean.sair}"
+						update=":msgGlobal">
 					</p:menuitem>
+
 					<p:menuitem value="Graficos">
 						<f:param name="i" value="1" />
 					</p:menuitem>
@@ -34,8 +36,9 @@
 
 					</p:menuitem>
 					<p:menuitem value="Autenticar"
-						action="/Pages/usuario/autenticacao.xhtml?faces-redirect=true">
-
+						action="/Pages/usuario/autenticacao.xhtml?faces-redirect=true"
+						rendered="#{autenticacaoBean.usuarioLogado.status == null}">
+						
 					</p:menuitem>
 
 
@@ -50,7 +53,8 @@
 			resizable="false" closable="false" collapsible="false">
 			<h:form id="frmMenuPrincipal">
 				<p:panelMenu id="pnlMenuPrincipal">
-					<p:submenu label="Cadastros" id="lbl">
+					<p:submenu label="Cadastros" id="lbl"
+						rendered="#{autenticacaoBean.usuarioLogado.status == 'admin'}">
 						<p:menuitem value="Tipo Dispositivo"
 							outcome="/Pages/tp_dispositivo/tipoDispositivoPesquisa.xhtml" />
 						<p:menuitem value="Dispositivos"
@@ -61,11 +65,13 @@
 							outcome="/Pages/comodo/comodoPesquisa.xhtml" />
 					</p:submenu>
 					<p:submenu label="Solicitações">
-						<p:menuitem value="Visualizar Todas"/>
+						<p:menuitem value="Visualizar Todas"
+							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin'}" />
 						<p:menuitem value="Solicitar"
-							outcome="/Pages/solicitacao/solicitacaoCadastro.xhtml" />
+							outcome="/Pages/solicitacao/solicitacaoCadastro.xhtml"
+							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin' or autenticacaoBean.usuarioLogado.status == 'novo' }" />
 					</p:submenu>
-					
+
 
 				</p:panelMenu>
 			</h:form>

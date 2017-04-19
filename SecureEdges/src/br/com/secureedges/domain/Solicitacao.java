@@ -58,6 +58,8 @@ public class Solicitacao extends EntidadeDominio {
 	}
 
 	public Usuario getUsuario() {
+		if (usuario == null)
+			usuario  = new Usuario();
 		return usuario;
 	}
 

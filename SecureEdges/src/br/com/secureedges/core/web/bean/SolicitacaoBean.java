@@ -1,7 +1,5 @@
 package br.com.secureedges.core.web.bean;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,32 +26,47 @@ import br.com.secureedges.util.FacesUtil;
 @ManagedBean
 @ViewScoped
 public class SolicitacaoBean {
+	public String usuarioNome;
 	public List<EntidadeDominio> listaDispositivos;
 	List<Dispositivo> listaDispositivosFiltrados;
+	public List<EntidadeDominio> listasolicitacoes;
+	List<EntidadeDominio> listasolicitacoesFiltradas;
 	private List<Item> listaItens;
 	private Solicitacao solicitacaoCadastro;
 	private static Map<String, ICommand> commands;
 	// pegando o valor que esta no autenticacaoBean passando para a variavel
 	// local o valor do bean
 	@ManagedProperty(value = "#{autenticacaoBean}")
-	private AutenticacaoBean autenticacaoBean =  new AutenticacaoBean();
+	private AutenticacaoBean autenticacaoBean = new AutenticacaoBean();
 	public List<EntidadeDominio> bkplistaDispositivos;
 	private String acao;
-	private BigDecimal valorFrete = new BigDecimal("0.0000");
 	private Fachada Fachada = new Fachada();
 
-
-
-	public BigDecimal getValorFrete() {
-
-		return valorFrete;
+	public String getUsuarioNome() {
+		return usuarioNome;
+	}
+	public void setUsuarioNome(String usuarioNome) {
+		this.usuarioNome = usuarioNome;
+	}
+	public List<EntidadeDominio> getListalistasolicitacoesFiltradas() {
+		if (listasolicitacoesFiltradas == null)
+			listasolicitacoesFiltradas = new ArrayList<>();
+		return listasolicitacoesFiltradas;
 	}
 
-	public void setValorFrete(BigDecimal valorFrete) {
-		valorFrete = valorFrete.round(new MathContext(4));
-		this.valorFrete = valorFrete;
+	public void setListalistasolicitacoesFiltradas(List<EntidadeDominio> listasolicitacoesFiltradas) {
+		this.listasolicitacoesFiltradas = listasolicitacoesFiltradas;
 	}
 
+	public List<EntidadeDominio> getListasolicitacoes() {
+		if (listasolicitacoes == null)
+			listasolicitacoes = new ArrayList<>();
+		return listasolicitacoes;
+	}
+	
+	public void setListasolicitacoes(List<EntidadeDominio> listasolicitacoes) {
+		this.listasolicitacoes = listasolicitacoes;
+	}
 	public String getAcao() {
 		return acao;
 	}
@@ -65,7 +78,8 @@ public class SolicitacaoBean {
 	public List<Dispositivo> getlistaDispositivosFiltrados() {
 		return listaDispositivosFiltrados;
 	}
-//
+
+	//
 	public void setlistaDispositivosFiltrados(List<Dispositivo> listaDispositivosFiltrados) {
 		this.listaDispositivosFiltrados = listaDispositivosFiltrados;
 	}
@@ -80,7 +94,7 @@ public class SolicitacaoBean {
 
 	public List<EntidadeDominio> getListaDispositivos() {
 		if (listaDispositivos == null)
-				listaDispositivos =  new ArrayList<>();
+			listaDispositivos = new ArrayList<>();
 		return listaDispositivos;
 	}
 
@@ -97,7 +111,6 @@ public class SolicitacaoBean {
 		commands.put("Salvar", new SalvarCommand());
 		commands.put("Editar", new AlterarCommand());
 		try {
-			
 
 		} catch (RuntimeException ex) {
 
@@ -109,58 +122,57 @@ public class SolicitacaoBean {
 	public void setsolicitacaoCadastro(Solicitacao solicitacaoCadastro) {
 		this.solicitacaoCadastro = solicitacaoCadastro;
 	}
-	
+
 	public Solicitacao getSolicitacaoCadastro() {
-		if (solicitacaoCadastro ==  null)
-				solicitacaoCadastro = new Solicitacao();
+		if (solicitacaoCadastro == null)
+			solicitacaoCadastro = new Solicitacao();
 		return solicitacaoCadastro;
 	}
 
-	public void salvar()
-	{
-		try
-		{
+	public void salvar() {
+		try {
 			System.out.println(solicitacaoCadastro.getDescricao());
-			//Obtêm o command para executar a respectiva operação
+			// Obtêm o command para executar a respectiva operação
 			ICommand command = commands.get(acao);
-			/*Executa o command que chamará a fachada para executar a operação requisitada
-			 * o retorno é uma instância da classe resultado que pode conter mensagens derro 
-			 * ou entidades de retorno*/
+			/*
+			 * Executa o command que chamará a fachada para executar a operação
+			 * requisitada o retorno é uma instância da classe resultado que
+			 * pode conter mensagens derro ou entidades de retorno
+			 */
 			solicitacaoCadastro.setUsuario(autenticacaoBean.getUsuarioLogado());
 			command.execute(solicitacaoCadastro);
 			solicitacaoCadastro = new Solicitacao();
-			
-		}catch(RuntimeException ex)
-		{
-			
-			FacesUtil.adicionarMSGError("Erro ao tentar incluir:"+ex.getMessage());
-			
+
+		} catch (RuntimeException ex) {
+
+			FacesUtil.adicionarMSGError("Erro ao tentar incluir:" + ex.getMessage());
+
 		}
-		
+
 	}
-	
-	
+
 	public void carregarDispositivos() {
 		List<EntidadeDominio> listaRecebe = new ArrayList<>();
 		listaRecebe = Fachada.listar(new Dispositivo());
 		ComodoDAO comodoDAO = new ComodoDAO();
 		Tipo_DispositivoDAO tipo_DispositivoDAO = new Tipo_DispositivoDAO();
 		System.out.println(listaRecebe.size());
-		listaDispositivos =   new ArrayList<>();
+		listaDispositivos = new ArrayList<>();
 		System.out.println(autenticacaoBean.getUsuarioLogado().getNome());
 		for (EntidadeDominio dispositivoList : listaRecebe) {
 			if (dispositivoList instanceof Dispositivo) {
-				 Long  codigoComodo = ((Dispositivo) dispositivoList).getComodo().getCodigo();
-				 Long  codigoTipo = ((Dispositivo) dispositivoList).getTP_Dispositivo().getCodigo();
-				 Comodo auxcmd = (Comodo) comodoDAO.buscarPorCodigo(codigoComodo);
-				 Tipo_Dispositivo auxTP = (Tipo_Dispositivo) tipo_DispositivoDAO.buscarPorCodigo(codigoTipo);
-				 ((Dispositivo) dispositivoList).setComodo(auxcmd);
-				 ((Dispositivo) dispositivoList).setTP_Dispositivo(auxTP);
+				Long codigoComodo = ((Dispositivo) dispositivoList).getComodo().getCodigo();
+				Long codigoTipo = ((Dispositivo) dispositivoList).getTP_Dispositivo().getCodigo();
+				Comodo auxcmd = (Comodo) comodoDAO.buscarPorCodigo(codigoComodo);
+				Tipo_Dispositivo auxTP = (Tipo_Dispositivo) tipo_DispositivoDAO.buscarPorCodigo(codigoTipo);
+				((Dispositivo) dispositivoList).setComodo(auxcmd);
+				((Dispositivo) dispositivoList).setTP_Dispositivo(auxTP);
 				listaDispositivos.add(dispositivoList);
-				}
-			
+			}
+
 		}
 	}
+
 	public List<Item> getListaItens() {
 		if (listaItens == null)
 			listaItens = new ArrayList<>();
@@ -170,11 +182,13 @@ public class SolicitacaoBean {
 	public void setListaItens(List<Item> listaItens) {
 		this.listaItens = listaItens;
 	}
+
 	public void adicionar(Dispositivo produto) {
 		int posicaoEncontrada = -1; // começa -1 pra ser nenhuma posição
 		Dispositivo produtoTemp = null;
-		
-		// verifica se o produto que irá ser adicionado ja esta na lista de itens
+
+		// verifica se o produto que irá ser adicionado ja esta na lista de
+		// itens
 		for (int pos = 0; pos < listaItens.size() && posicaoEncontrada < 0; pos++) {
 			Item itemTemp = listaItens.get(pos);
 
@@ -198,23 +212,32 @@ public class SolicitacaoBean {
 
 		// produto novo
 		if (posicaoEncontrada < 0) {
-			
+
 			// verifica se a quantidade vendida é viavel
 
-				listaItens.add(item);
+			listaItens.add(item);
 
-				}
+		}
 
 		// produto ja inserido na lista de itens
 		else {
 			Item itemTemp = listaItens.get(posicaoEncontrada);
-				listaItens.set(posicaoEncontrada, item);
-				listaItens.set(posicaoEncontrada, item);
-			
+			listaItens.set(posicaoEncontrada, item);
+			listaItens.set(posicaoEncontrada, item);
+
 		}
 
 	}
 
-	
+	public void carregarPesquisa() {
+		try {
+			listasolicitacoes = Fachada.listar(new Solicitacao());
+			System.out.println(listasolicitacoes);
+		} catch (RuntimeException ex) {
+
+			FacesUtil.adicionarMSGError("Erro ao tentar listar os  Usuarios:" + ex.getMessage());
+
+		}
+	}
 
 }

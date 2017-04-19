@@ -13,8 +13,10 @@ import com.mysql.jdbc.Statement;
 
 import br.com.secureedges.core.IDAO;
 import br.com.secureedges.core.util.factory.Conexao;
+import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Solicitacao;
+import br.com.secureedges.domain.Usuario;
 import br.com.secureedges.util.FacesUtil;
 
 public class SolicitacaoDAO implements IDAO {
@@ -28,8 +30,8 @@ public class SolicitacaoDAO implements IDAO {
 		StringBuffer sql = new StringBuffer();
 
 		sql.append(
-				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Comodo_cmdo_Codigo,sol_descricao,sol_data,tb_Usuario_usr_Codigo)");
-		sql.append(" VALUES (?,?,?,?,?,?,?)");
+				"INSERT INTO db_secureedges.tb_solicitacao(sol_Codigo,sol_Status,tb_Dispositivo_disp_Codigo,tb_Comodo_cmdo_Codigo,sol_descricao,sol_data,tb_Usuario_usr_Codigo,tb_Usuario_usr_Nome)");
+		sql.append(" VALUES (?,?,?,?,?,?,?,?)");
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),
 				Statement.RETURN_GENERATED_KEYS);
@@ -46,6 +48,7 @@ public class SolicitacaoDAO implements IDAO {
 			pstm.setString(++i, solicitacao.getDescricao());
 			pstm.setString(++i, vendaHorario);
 			pstm.setLong(++i, solicitacao.getUsuario().getCodigo());
+			pstm.setString(++i, solicitacao.getUsuario().getNome());
 
 			pstm.executeUpdate();
 
@@ -129,13 +132,23 @@ public class SolicitacaoDAO implements IDAO {
 			ResultSet rSet = pstm.executeQuery();
 
 			while (rSet.next()) {
-
 				Solicitacao solicitacao = new Solicitacao();
 				solicitacao.setCodigo(rSet.getLong("sol_Codigo"));
 				solicitacao.setStatus((rSet.getString("sol_Status")));
-				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
-				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_usuario_usr_Codigo")));
-				lista.add(solicitacao);
+				solicitacao.getDispositivo().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
+				solicitacao.getComodo().setCodigo((rSet.getLong("tb_Comodo_cmdo_Codigo")));
+				solicitacao.setDescricao(rSet.getString("sol_descricao"));
+				solicitacao.setData(rSet.getDate("sol_data"));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Usuario_usr_Codigo")));
+				solicitacao.getUsuario().setNome((rSet.getString("tb_Usuario_usr_Nome")));
+				ComodoDAO comodoDAO =  new ComodoDAO();
+				Comodo comodo = (Comodo) comodoDAO.buscarPorCodigo(solicitacao.getComodo().getCodigo());
+				UsuarioDAO usuarioDAO =  new UsuarioDAO();
+				Usuario usuario = (Usuario) usuarioDAO.buscarPorCodigo(solicitacao.getUsuario().getCodigo());
+				solicitacao.setComodo(comodo);
+				solicitacao.setUsuario(usuario);
+				lista.add(solicitacao);					
+				
 			}
 
 		} catch (SQLException e) {

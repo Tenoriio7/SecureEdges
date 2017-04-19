@@ -56,7 +56,8 @@ public class AutenticacaoBean {
 	
 	public String  sair (){
 		usuarioLogado =  null;
-		return "/templates/modeloGeralUsuario.xhtml?faces-redirect=true";
+		FacesUtil.adicionarMSGInfo("Realizado Logout");
+		return "/templates/modeloGeral.xhtml?faces-redirect=true";
 		
 	}
 	
