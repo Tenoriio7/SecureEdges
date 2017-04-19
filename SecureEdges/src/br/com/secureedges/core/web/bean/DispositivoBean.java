@@ -1,16 +1,20 @@
 package br.com.secureedges.core.web.bean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.zu.ardulink.Link;
 import org.zu.ardulink.gui.DigitalPinStatus;
 import org.zu.ardulink.protocol.IProtocol;
 
+import br.com.secureedges.core.dao.DispositivoDAO;
+import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.impl.controle.Fachada;
 import br.com.secureedges.util.FacesUtil;
 import br.com.secureedges.core.web.command.ICommand;
@@ -18,6 +22,7 @@ import br.com.secureedges.core.web.impl.AlterarCommand;
 import br.com.secureedges.core.web.impl.ExcluirCommand;
 import br.com.secureedges.core.web.impl.SalvarCommand;
 import br.com.secureedges.domain.EntidadeDominio;
+import br.com.secureedges.domain.Solicitacao;
 import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.domain.Tipo_Dispositivo;
 import br.com.secureedges.domain.Dispositivo;
@@ -26,7 +31,7 @@ import br.com.secureedges.domain.Dispositivo;
 @ViewScoped
 public class DispositivoBean extends EntidadeDominio {
 	private Dispositivo DispositivoCadastro;
-	List<EntidadeDominio> listaDispositivos;
+	List<EntidadeDominio> listaDispositivos= new ArrayList<>();
 	List<Dispositivo> listaDispositivosFiltrados;
 	List<EntidadeDominio> listaComodos;
 	List<EntidadeDominio> listaTipo_Dispositivos;
@@ -34,6 +39,10 @@ public class DispositivoBean extends EntidadeDominio {
 	private String acao;
 	private Long codigo;
 	private static Map<String, ICommand> commands;
+	@ManagedProperty(value = "#{autenticacaoBean}")
+	private AutenticacaoBean autenticacaoBean = new AutenticacaoBean();
+	
+
 
 	public DispositivoBean() {
 		/*
@@ -44,6 +53,13 @@ public class DispositivoBean extends EntidadeDominio {
 		commands.put("Salvar", new SalvarCommand());
 		commands.put("Excluir", new ExcluirCommand());
 		commands.put("Editar", new AlterarCommand());
+	}
+	
+	public AutenticacaoBean getAutenticacaoBean() {
+		return autenticacaoBean;
+	}
+	public void setAutenticacaoBean(AutenticacaoBean autenticacaoBean) {
+		this.autenticacaoBean = autenticacaoBean;
 	}
 
 	public List<EntidadeDominio> getListaTipo_Dispositivos() {
@@ -82,6 +98,9 @@ public class DispositivoBean extends EntidadeDominio {
 	}
 
 	public List<EntidadeDominio> getListaDispositivos() {
+		if (listaDispositivos == null){
+			listaDispositivos = new ArrayList<>();
+		}
 		return listaDispositivos;
 	}
 
@@ -302,5 +321,24 @@ public class DispositivoBean extends EntidadeDominio {
 		return false;
 
 	}
+	
+	public void carregarPesquisaDetalhada() {
+		try {
+			SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+			List<EntidadeDominio> solicitacoes = solicitacaoDAO.listar();
+			for (EntidadeDominio solicitacao : solicitacoes) {
+				if(((Solicitacao) solicitacao).getStatus().equals("aprovada")){
+					DispositivoDAO dao = new DispositivoDAO();
+					listaDispositivos.add(dao.buscarPorCodigo(((Solicitacao) solicitacao).getDispositivo().getCodigo()));
+				}
+				
+			}
+		} catch (RuntimeException ex) {
+
+			FacesUtil.adicionarMSGError("Erro ao tentar listar os  Dispositivoes:" + ex.getMessage());
+
+		}
+	}
+	
 
 }

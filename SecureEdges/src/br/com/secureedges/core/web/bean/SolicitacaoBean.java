@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
 import br.com.secureedges.core.impl.controle.Fachada;
 import br.com.secureedges.core.web.command.ICommand;
@@ -19,8 +20,10 @@ import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Item;
+import br.com.secureedges.domain.Resultado;
 import br.com.secureedges.domain.Solicitacao;
 import br.com.secureedges.domain.Tipo_Dispositivo;
+import br.com.secureedges.domain.Usuario;
 import br.com.secureedges.util.FacesUtil;
 
 @ManagedBean
@@ -232,11 +235,30 @@ public class SolicitacaoBean {
 	public void carregarPesquisa() {
 		try {
 			listasolicitacoes = Fachada.listar(new Solicitacao());
-			System.out.println(listasolicitacoes);
 		} catch (RuntimeException ex) {
 
 			FacesUtil.adicionarMSGError("Erro ao tentar listar os  Usuarios:" + ex.getMessage());
 
+		}
+	}
+	
+	
+	public void manipularSolicitacao(){
+		System.out.println("CHEGUEI AQUI");
+		try{
+			String valor = FacesUtil.getParam("solSts");
+			Long cod = Long.parseLong(FacesUtil.getParam("solCod"));
+			SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
+			solicitacaoCadastro =  (Solicitacao) solicitacaoDAO.buscarPorCodigo(cod);
+			if(valor != null)
+			{
+				ICommand command = commands.get("Editar");
+				solicitacaoCadastro.setStatus(valor);
+				command.execute(solicitacaoCadastro);
+			}
+		
+		} catch(RuntimeException ex){
+			
 		}
 	}
 

@@ -6,7 +6,8 @@ import org.hibernate.mapping.Set;
 
 public class Solicitacao extends EntidadeDominio {
 
-	private String status = "novo";
+	private String status;
+	
 
 	private String descricao;
 	private Comodo comodo;
@@ -40,6 +41,8 @@ public class Solicitacao extends EntidadeDominio {
 	private Dispositivo dispositivo;
 
 	public String getStatus() {
+		if (status == null)
+			status = "novo";
 		return status;
 	}
 

@@ -170,14 +170,24 @@ public class SolicitacaoDAO implements IDAO {
 
 		try {
 			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			pstm.setLong(1, codigo);
 			ResultSet rSet = pstm.executeQuery();
 
 			while (rSet.next()) {
-
 				solicitacao.setCodigo(rSet.getLong("sol_Codigo"));
 				solicitacao.setStatus((rSet.getString("sol_Status")));
-				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
-				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_usuario_usr_Codigo")));
+				solicitacao.getDispositivo().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
+				solicitacao.getComodo().setCodigo((rSet.getLong("tb_Comodo_cmdo_Codigo")));
+				solicitacao.setDescricao(rSet.getString("sol_descricao"));
+				solicitacao.setData(rSet.getDate("sol_data"));
+				solicitacao.getUsuario().setCodigo((rSet.getLong("tb_Usuario_usr_Codigo")));
+				solicitacao.getUsuario().setNome((rSet.getString("tb_Usuario_usr_Nome")));
+				ComodoDAO comodoDAO =  new ComodoDAO();
+				Comodo comodo = (Comodo) comodoDAO.buscarPorCodigo(solicitacao.getComodo().getCodigo());
+				UsuarioDAO usuarioDAO =  new UsuarioDAO();
+				Usuario usuario = (Usuario) usuarioDAO.buscarPorCodigo(solicitacao.getUsuario().getCodigo());
+				solicitacao.setComodo(comodo);
+				solicitacao.setUsuario(usuario);
 
 			}
 
