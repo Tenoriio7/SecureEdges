@@ -33,17 +33,11 @@ public class AutenticacaoBean {
 				return null;
 			}
 			else{
-				FacesUtil.adicionarMSGInfo("Usuario autenticado com sucesso");
-				if(usuarioLogado.getStatus().equals("ativo"))
-				{
-					System.out.println("if");
-					return "/templates/modeloGeralUsuario.xhtml?faces-redirect=true";
-				}
-				else{
-				return "/templates/modeloGeral.xhtml?faces-redirect=true";
+					FacesUtil.adicionarMSGInfo("Usuario autenticado com sucesso");
+					return "/templates/modeloGeral.xhtml?faces-redirect=true";
 				}
 				
-			}
+			
 			
 				
 			

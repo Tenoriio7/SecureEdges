@@ -14,6 +14,7 @@ import com.mysql.jdbc.Statement;
 import br.com.secureedges.core.IDAO;
 import br.com.secureedges.core.util.factory.Conexao;
 import br.com.secureedges.domain.Comodo;
+import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
 import br.com.secureedges.domain.Solicitacao;
 import br.com.secureedges.domain.Usuario;
@@ -146,8 +147,12 @@ public class SolicitacaoDAO implements IDAO {
 				UsuarioDAO usuarioDAO =  new UsuarioDAO();
 				Usuario usuario = (Usuario) usuarioDAO.buscarPorCodigo(solicitacao.getUsuario().getCodigo());
 				solicitacao.setComodo(comodo);
-				solicitacao.setUsuario(usuario);
-				lista.add(solicitacao);					
+				solicitacao.setUsuario(usuario);			
+				Long codDisp = ((Solicitacao) solicitacao).getDispositivo().getCodigo();
+				DispositivoDAO dao  = new DispositivoDAO();
+				Dispositivo dispAtual  = (Dispositivo) dao.buscarPorCodigo(codDisp);
+				solicitacao.setDispositivo(dispAtual);
+				lista.add(solicitacao);
 				
 			}
 

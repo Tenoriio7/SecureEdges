@@ -31,7 +31,7 @@ import br.com.secureedges.domain.Dispositivo;
 @ViewScoped
 public class DispositivoBean extends EntidadeDominio {
 	private Dispositivo DispositivoCadastro;
-	List<EntidadeDominio> listaDispositivos= new ArrayList<>();
+	List<EntidadeDominio> listaDispositivos = new ArrayList<>();
 	List<Dispositivo> listaDispositivosFiltrados;
 	List<EntidadeDominio> listaComodos;
 	List<EntidadeDominio> listaTipo_Dispositivos;
@@ -41,8 +41,6 @@ public class DispositivoBean extends EntidadeDominio {
 	private static Map<String, ICommand> commands;
 	@ManagedProperty(value = "#{autenticacaoBean}")
 	private AutenticacaoBean autenticacaoBean = new AutenticacaoBean();
-	
-
 
 	public DispositivoBean() {
 		/*
@@ -54,10 +52,11 @@ public class DispositivoBean extends EntidadeDominio {
 		commands.put("Excluir", new ExcluirCommand());
 		commands.put("Editar", new AlterarCommand());
 	}
-	
+
 	public AutenticacaoBean getAutenticacaoBean() {
 		return autenticacaoBean;
 	}
+
 	public void setAutenticacaoBean(AutenticacaoBean autenticacaoBean) {
 		this.autenticacaoBean = autenticacaoBean;
 	}
@@ -98,7 +97,7 @@ public class DispositivoBean extends EntidadeDominio {
 	}
 
 	public List<EntidadeDominio> getListaDispositivos() {
-		if (listaDispositivos == null){
+		if (listaDispositivos == null) {
 			listaDispositivos = new ArrayList<>();
 		}
 		return listaDispositivos;
@@ -295,15 +294,15 @@ public class DispositivoBean extends EntidadeDominio {
 				Thread.sleep(8000); // 4
 
 				int power = IProtocol.HIGH;
-				String aux =dispositivo.getCodigo().toString();
-				int teste=Integer.parseInt(aux);
+				String aux = dispositivo.getCodigo().toString();
+				int teste = Integer.parseInt(aux);
 
 				while (true) {
 					System.out.println("Send power:" + power);
 					link.sendPowerPinSwitch(teste, power); // Send energy to
-														// the right pin
-														// of your
-														// sensor
+															// the right pin
+															// of your
+															// sensor
 					if (power == IProtocol.HIGH) {
 						power = IProtocol.LOW;
 					} else {
@@ -321,17 +320,23 @@ public class DispositivoBean extends EntidadeDominio {
 		return false;
 
 	}
-	
+
 	public void carregarPesquisaDetalhada() {
 		try {
 			SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
 			List<EntidadeDominio> solicitacoes = solicitacaoDAO.listar();
 			for (EntidadeDominio solicitacao : solicitacoes) {
-				if(((Solicitacao) solicitacao).getStatus().equals("aprovada")){
+				if (((Solicitacao) solicitacao).getStatus().equals("aprovada")) {
 					DispositivoDAO dao = new DispositivoDAO();
-					listaDispositivos.add(dao.buscarPorCodigo(((Solicitacao) solicitacao).getDispositivo().getCodigo()));
+					if (solicitacao instanceof Solicitacao) {
+						if (((Solicitacao) solicitacao).getUsuario().getCodigo() == autenticacaoBean.getUsuarioLogado()
+								.getCodigo()) {
+							listaDispositivos
+									.add(dao.buscarPorCodigo(((Solicitacao) solicitacao).getDispositivo().getCodigo()));
+						}
+					}
 				}
-				
+
 			}
 		} catch (RuntimeException ex) {
 
@@ -339,6 +344,5 @@ public class DispositivoBean extends EntidadeDominio {
 
 		}
 	}
-	
 
 }

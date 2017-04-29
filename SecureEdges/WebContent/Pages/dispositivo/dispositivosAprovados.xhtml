@@ -50,18 +50,6 @@
 				</p:column>
 
 				<p:column headerText="Opções">
-					<p:button value="Excluir" id="btExcluir"
-						outcome="/Pages/dispositivo/dispositivoCadastro.xhtml?faces-redirect=true">
-						<f:param name="dispAcao" value="Excluir" />
-						<f:param name="dispCod" value="#{dispositivo.codigo}" />
-					</p:button>
-
-					<p:button value="Editar"
-						outcome="/Pages/dispositivo/dispositivoCadastro.xhtml?faces-redirect=true">
-						<f:param name="dispAcao" value="Editar" />
-						<f:param name="dispCod" value="#{dispositivo.codigo}" />
-					</p:button>
-
 					<p:commandButton value="Manipular"
 					actionListener="dispositivoBean.manipular">
 					</p:commandButton>

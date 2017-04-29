@@ -25,8 +25,7 @@
 				<p:tabMenu rendered="true" activeIndex="-1">
 					<p:menuitem value="Sair"
 						rendered="#{autenticacaoBean.usuarioLogado.status != null}"
-						action="#{autenticacaoBean.sair}"
-						update=":msgGlobal">
+						action="#{autenticacaoBean.sair}" update=":msgGlobal">
 					</p:menuitem>
 
 					<p:menuitem value="Graficos">
@@ -38,7 +37,7 @@
 					<p:menuitem value="Autenticar"
 						action="/Pages/usuario/autenticacao.xhtml?faces-redirect=true"
 						rendered="#{autenticacaoBean.usuarioLogado.status == null}">
-						
+
 					</p:menuitem>
 
 
@@ -66,10 +65,14 @@
 					</p:submenu>
 					<p:submenu label="Solicitações">
 						<p:menuitem value="Visualizar Todas"
-							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin'}" />
+							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin'}"
+							outcome="/Pages/solicitacao/solicitacaoPesquisa.xhtml" />
 						<p:menuitem value="Solicitar"
 							outcome="/Pages/solicitacao/solicitacaoCadastro.xhtml"
-							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin' or autenticacaoBean.usuarioLogado.status == 'novo' }" />
+							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin' or autenticacaoBean.usuarioLogado.status == 'ativo' }" />
+						<p:menuitem value="Meus Dispositivos"
+							outcome="/Pages/dispositivo/dispositivosAprovados.xhtml"
+							rendered="#{autenticacaoBean.usuarioLogado.status == 'admin' or autenticacaoBean.usuarioLogado.status == 'ativo' }" />
 					</p:submenu>
 
 

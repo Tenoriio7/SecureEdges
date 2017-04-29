@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import br.com.secureedges.core.dao.ComodoDAO;
+import br.com.secureedges.core.dao.DispositivoDAO;
 import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
 import br.com.secureedges.core.impl.controle.Fachada;
