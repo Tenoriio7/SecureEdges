@@ -27,8 +27,8 @@ public class DispositivoDAO implements IDAO {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("INSERT INTO db_secureedges.tb_dispositivo(disp_codigo,disp_descricao,cmdo_Codigo,tp_disp_Codigo,interface_Arduino)");
-		sql.append(" VALUES (?,?,?,?,?)");
+		sql.append("INSERT INTO db_secureedges.tb_dispositivo(disp_codigo,disp_descricao,cmdo_Codigo,tp_disp_Codigo,interface_Arduino,disp_status)");
+		sql.append(" VALUES (?,?,?,?,?,?)");
 		
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),Statement.RETURN_GENERATED_KEYS);
@@ -41,6 +41,7 @@ public class DispositivoDAO implements IDAO {
 			pstm.setLong(++i, dispositivo.getComodo().getCodigo());
 			pstm.setLong(++i, dispositivo.getTP_Dispositivo().getCodigo());
 			pstm.setLong(++i, dispositivo.getInterface_Arduino());
+			pstm.setInt(++i, dispositivo.getDisp_status());
 			
 			pstm.executeUpdate();
 			
@@ -70,7 +71,7 @@ public void Editar(EntidadeDominio entidade) throws SQLException {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("UPDATE db_secureedges.tb_dispositivo set disp_Descricao = ?,cmdo_codigo = ?,tp_disp_Codigo = ? ");	
+		sql.append("UPDATE db_secureedges.tb_dispositivo set disp_Descricao = ?,cmdo_codigo = ?,tp_disp_Codigo = ?, disp_status = ? ");	
 		sql.append(" WHERE disp_codigo=?");
 
 		
@@ -82,6 +83,7 @@ public void Editar(EntidadeDominio entidade) throws SQLException {
 			pstm.setString(++i,dispositivo.getDescricao());
 			pstm.setLong(++i,dispositivo.getComodo().getCodigo());
 			pstm.setLong(++i,dispositivo.getTP_Dispositivo().getCodigo());
+			pstm.setInt(++i, dispositivo.getDisp_status());
 			pstm.setLong(++i,dispositivo.getCodigo());
 			
 			pstm.executeUpdate();
@@ -142,6 +144,7 @@ public  List<EntidadeDominio> listar() {
 			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
 			dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
 			dispositivo.setInterface_Arduino(rSet.getLong("interface_Arduino"));
+			dispositivo.setDisp_status(rSet.getInt("disp_status"));
 			
 			lista.add(dispositivo);
 		}

@@ -48,14 +48,16 @@
 					sortBy="#{dispositivo.descricao}">
 					<h:outputText value="#{dispositivo.descricao}"></h:outputText>
 				</p:column>
-				<p:column headerText="Porta" filterBy="#{dispositivo.interface_Arduino}"
-					sortBy="#{dispositivo.interface_Arduino}">
-					<h:outputText value="#{dispositivo.interface_Arduino}"></h:outputText>
+				<p:column headerText="Status" filterBy="#{dispositivo.disp_status}"
+					sortBy="#{dispositivo.disp_status}">
+					<h:outputText value="#{dispositivo.disp_status}"></h:outputText>
 				</p:column>
 
 				<p:column headerText="Opções">
 					<p:commandButton value="Manipular"
-						actionListener="dispositivoBean.manipular">
+						actionListener="#{dispositivoBean.manipular(dispositivo)}"
+						action="/Pages/dispositivo/dispositivosAprovados.xhtml">
+						<f:param name="dispAcao" value="Editar" />
 					</p:commandButton>
 
 

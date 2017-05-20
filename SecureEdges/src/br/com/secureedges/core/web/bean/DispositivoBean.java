@@ -13,6 +13,7 @@ import org.zu.ardulink.Link;
 import org.zu.ardulink.gui.DigitalPinStatus;
 import org.zu.ardulink.protocol.IProtocol;
 
+import br.com.secureedges.core.ClasseListener;
 import br.com.secureedges.core.dao.DispositivoDAO;
 import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.impl.controle.Fachada;
@@ -273,46 +274,39 @@ public class DispositivoBean extends EntidadeDominio {
 
 	public boolean manipular(Dispositivo dispositivo) {
 
+		System.out.println("status de entrada:" + dispositivo.getDisp_status());
+		ClasseListener objArduino = new ClasseListener();
+
 		try {
 			// Create link to connect to serial arduino
-			Link link = Link.getDefaultInstance(); // 1
-			// Comment this row if you use just the default connection
-			// link = getDigisparkConnection();
-			// Get connected port on your pc
-			List<String> portList = link.getPortList(); // 2
-			if (portList != null && portList.size() > 0) {
-				String port = portList.get(0);
-
-				DigitalPinStatus digitalPinStatus = new DigitalPinStatus();
-				System.out.println(digitalPinStatus);
-				digitalPinStatus.setPin(Integer.parseInt(dispositivo.getInterface_Arduino().toString()));
-				System.out.println("Connecting on port: " + port);
-
-				boolean connected = link.connect(port); // 3
-				System.out.println("Connected:" + connected);
-
-				Thread.sleep(8000); // 4
-
-				int power = IProtocol.HIGH;
-				String aux = dispositivo.getCodigo().toString();
-				int teste = Integer.parseInt(aux);
-
-				while (true) {
-					System.out.println("Send power:" + power);
-					link.sendPowerPinSwitch(teste, power); // Send energy to
-															// the right pin
-															// of your
-															// sensor
-					if (power == IProtocol.HIGH) {
-						power = IProtocol.LOW;
-					} else {
-						power = IProtocol.HIGH;
-					}
-					Thread.sleep(8000);
-				}
-			} else {
-				System.out.println("No port found!");
+			int power = 0;
+			if (dispositivo.getDisp_status() == 0) {
+				power = 1;
+				dispositivo.setDisp_status(1);
+			} else if(dispositivo.getDisp_status() == 1) {
+				power = 0;
+				dispositivo.setDisp_status(0);
 			}
+
+			System.out.println("O power e :" + power);
+
+			String aux = dispositivo.getInterface_Arduino().toString();
+			int teste = Integer.parseInt(aux);
+
+			System.out.println("Send power:" + power + "\n Interface: " + teste);
+			objArduino.getLink().sendPowerPinSwitch(teste, power); // Send energy to
+													// the right pin
+													// of your
+													// sensor
+			ICommand command = commands.get("Editar");
+			/*
+			 * Executa o command que chamará a fachada para executar a operação
+			 * requisitada o retorno é uma instância da classe resultado que
+			 * pode conter mensagens derro ou entidades de retorno
+			 */
+			command.execute(dispositivo);
+			System.out.println("status de saida:" + dispositivo.getDisp_status());
+			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
