@@ -27,8 +27,8 @@ public class DispositivoDAO implements IDAO {
 		
 		StringBuffer sql = new StringBuffer();
 		
-		sql.append("INSERT INTO db_secureedges.tb_dispositivo(disp_codigo,disp_descricao,cmdo_Codigo,tp_disp_Codigo)");
-		sql.append(" VALUES (?,?,?,?)");
+		sql.append("INSERT INTO db_secureedges.tb_dispositivo(disp_codigo,disp_descricao,cmdo_Codigo,tp_disp_Codigo,interface_Arduino)");
+		sql.append(" VALUES (?,?,?,?,?)");
 		
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),Statement.RETURN_GENERATED_KEYS);
@@ -40,6 +40,7 @@ public class DispositivoDAO implements IDAO {
 			pstm.setString(++i, dispositivo.getDescricao());
 			pstm.setLong(++i, dispositivo.getComodo().getCodigo());
 			pstm.setLong(++i, dispositivo.getTP_Dispositivo().getCodigo());
+			pstm.setLong(++i, dispositivo.getInterface_Arduino());
 			
 			pstm.executeUpdate();
 			
@@ -140,6 +141,8 @@ public  List<EntidadeDominio> listar() {
 			dispositivo.setDescricao(rSet.getString("disp_Descricao"));
 			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
 			dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
+			dispositivo.setInterface_Arduino(rSet.getLong("interface_Arduino"));
+			
 			lista.add(dispositivo);
 		}
 		
@@ -171,6 +174,7 @@ public EntidadeDominio buscarPorCodigo(Long codigo) {
 			dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
 			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
 			dispositivo.setDescricao(rSet.getString("disp_descricao"));
+			dispositivo.setInterface_Arduino(rSet.getLong("interface_Arduino"));
 				
 			
 		}

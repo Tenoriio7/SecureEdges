@@ -35,6 +35,18 @@ public class Dispositivo extends EntidadeDominio {
 
 	private String status;
 	
+	private Long interface_Arduino;
+	
+	public Long getInterface_Arduino() {
+		if (interface_Arduino == null)
+			interface_Arduino = new Long("0.0");
+		return interface_Arduino;
+	}
+	
+	public void setInterface_Arduino(Long interface_Arduino) {
+		this.interface_Arduino = interface_Arduino;
+	}
+	
 	public String getStatus() {
 		return status;
 	}

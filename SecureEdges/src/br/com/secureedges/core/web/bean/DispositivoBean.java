@@ -285,7 +285,7 @@ public class DispositivoBean extends EntidadeDominio {
 
 				DigitalPinStatus digitalPinStatus = new DigitalPinStatus();
 				System.out.println(digitalPinStatus);
-				digitalPinStatus.setPin(3);
+				digitalPinStatus.setPin(Integer.parseInt(dispositivo.getInterface_Arduino().toString()));
 				System.out.println("Connecting on port: " + port);
 
 				boolean connected = link.connect(port); // 3
