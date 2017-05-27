@@ -49,7 +49,7 @@ public class Dispositivo extends EntidadeDominio {
 	
 	public Long getInterface_Arduino() {
 		if (interface_Arduino == null)
-			interface_Arduino = new Long("0.0");
+			interface_Arduino = new Long("1");
 		return interface_Arduino;
 	}
 	

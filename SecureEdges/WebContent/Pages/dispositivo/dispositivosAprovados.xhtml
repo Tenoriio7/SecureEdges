@@ -50,13 +50,16 @@
 				</p:column>
 				<p:column headerText="Status" filterBy="#{dispositivo.disp_status}"
 					sortBy="#{dispositivo.disp_status}">
-					<h:outputText value="#{dispositivo.disp_status}"></h:outputText>
+					<h:outputLabel value="Ativado"
+					rendered="#{dispositivo.disp_status == '1'}"></h:outputLabel>
+					<h:outputLabel value="Desativado"
+					rendered="#{dispositivo.disp_status == '0'}"></h:outputLabel>
 				</p:column>
 
 				<p:column headerText="Opções">
 					<p:commandButton value="Manipular"
 						actionListener="#{dispositivoBean.manipular(dispositivo)}"
-						action="/Pages/dispositivo/dispositivosAprovados.xhtml">
+						action="/Pages/dispositivo/dispositivosAprovados.xhtml?faces-redirect=true">
 						<f:param name="dispAcao" value="Editar" />
 					</p:commandButton>
 

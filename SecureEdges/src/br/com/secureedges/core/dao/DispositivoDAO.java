@@ -178,6 +178,7 @@ public EntidadeDominio buscarPorCodigo(Long codigo) {
 			dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
 			dispositivo.setDescricao(rSet.getString("disp_descricao"));
 			dispositivo.setInterface_Arduino(rSet.getLong("interface_Arduino"));
+			dispositivo.setDisp_status(rSet.getInt("disp_status"));
 				
 			
 		}

@@ -78,4 +78,15 @@ CREATE TABLE IF NOT EXISTS `db_secureedges`.`tb_usuario` (
   PRIMARY KEY (`usr_Codigo`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
+
+
+CREATE TABLE `db_secureedges`.`tb_dispositivo` (
+  `disp_codigo` INT NOT NULL AUTO_INCREMENT,
+  `disp_descricao` VARCHAR(45) NOT NULL,
+  `cmdo_Codigo` VARCHAR(45) NOT NULL,
+  `tp_disp_Codigo` VARCHAR(45) NOT NULL,
+  `interface_Arduino` VARCHAR(45) NOT NULL,
+  `disp_status` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`disp_codigo`));
+
 DEFAULT CHARACTER SET = utf8

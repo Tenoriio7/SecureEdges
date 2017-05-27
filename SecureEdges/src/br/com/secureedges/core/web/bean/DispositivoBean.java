@@ -209,7 +209,7 @@ public class DispositivoBean extends EntidadeDominio {
 		try {
 			DispositivoCadastro.setStatus(statusPro);
 			// Obtêm o command para executar a respectiva operação
-			ICommand command = commands.get(acao);
+			ICommand command = commands.get("Editar");
 			/*
 			 * Executa o command que chamará a fachada para executar a operação
 			 * requisitada o retorno é uma instância da classe resultado que
@@ -276,9 +276,8 @@ public class DispositivoBean extends EntidadeDominio {
 
 		System.out.println("status de entrada:" + dispositivo.getDisp_status());
 		ClasseListener objArduino = new ClasseListener();
-
+		System.out.println("o status atual é:" + dispositivo.getDisp_status());
 		try {
-			// Create link to connect to serial arduino
 			int power = 0;
 			if (dispositivo.getDisp_status() == 0) {
 				power = 1;
@@ -287,8 +286,9 @@ public class DispositivoBean extends EntidadeDominio {
 				power = 0;
 				dispositivo.setDisp_status(0);
 			}
+			
+			System.out.println("o status agora é:" + dispositivo.getDisp_status());
 
-			System.out.println("O power e :" + power);
 
 			String aux = dispositivo.getInterface_Arduino().toString();
 			int teste = Integer.parseInt(aux);
