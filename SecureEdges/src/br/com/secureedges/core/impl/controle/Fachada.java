@@ -13,6 +13,12 @@ import br.com.secureedges.core.dao.DispositivoDAO;
 import br.com.secureedges.core.dao.SolicitacaoDAO;
 import br.com.secureedges.core.dao.Tipo_DispositivoDAO;
 import br.com.secureedges.core.dao.UsuarioDAO;
+import br.com.secureedges.core.impl.negocio.ValidaDadosObrigatoriosComodo;
+import br.com.secureedges.core.impl.negocio.ValidaDadosObrigatoriosDispositivo;
+import br.com.secureedges.core.impl.negocio.ValidaDadosObrigatoriosTipo_Dispositivo;
+import br.com.secureedges.core.impl.negocio.ValidaDadosObrigatoriosUsuario;
+import br.com.secureedges.core.impl.negocio.ValidadorCpf;
+import br.com.secureedges.core.impl.negocio.ValidadorDadosObrigatoriosSolicitacao;
 import br.com.secureedges.domain.Comodo;
 import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
@@ -37,10 +43,10 @@ public class Fachada implements IFachada {
 	 */
 	private Map<String, Map<String, List<IStrategy>>> rns;
 
-	private Resultado resultado =  new Resultado();
+	private Resultado resultado = new Resultado();
 
 	public Fachada() {
-		/* Intânciando o Map de	 DAOS */
+		/* Intânciando o Map de DAOS */
 		daos = new HashMap<String, IDAO>();
 		/* Intânciando o Map de Regras de Negócio */
 		rns = new HashMap<String, Map<String, List<IStrategy>>>();
@@ -50,7 +56,7 @@ public class Fachada implements IFachada {
 		DispositivoDAO dispositivoDAO = new DispositivoDAO();
 		SolicitacaoDAO solicitacaoDAO = new SolicitacaoDAO();
 		Tipo_DispositivoDAO tipo_DispositivoDAO = new Tipo_DispositivoDAO();
-		UsuarioDAO usuarioDAO =  new UsuarioDAO();
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
 
 		/* Adicionando cada dao no MAP indexando pelo nome da classe */
 		daos.put(Comodo.class.getName(), (IDAO) comodoDAO);
@@ -60,101 +66,85 @@ public class Fachada implements IFachada {
 		daos.put(Usuario.class.getName(), (IDAO) usuarioDAO);
 
 		/* Criando instâncias de regras de negócio a serem utilizados */
-//		ValidadorDadosObrigatoriosFornecedor vrDadosObrigatoriosFornecedor = new ValidadorDadosObrigatoriosFornecedor();
-//		ValidadorCnpj vCnpj = new ValidadorCnpj();
-//		ValidadorDadosObrigatoriosVenda dadosObrigatoriosVenda = new ValidadorDadosObrigatoriosVenda();
-//		ValidadorCpf validadorCpf = new ValidadorCpf();
-//		ValidaDadosObrigatoriosUsuario obrigatoriosUsuario =  new ValidaDadosObrigatoriosUsuario();
-//		ValidaDadosObrigatoriosGenero obrigatoriosGenero =  new ValidaDadosObrigatoriosGenero();
-//		ValidaDadosObrigatoriosProduto obrigatoriosProduto =  new ValidaDadosObrigatoriosProduto();
-//		ValidaQuantidadeProduto quantidadeProduto =  new ValidaQuantidadeProduto();
+		ValidaDadosObrigatoriosComodo dadosObrigatoriosComodo = new ValidaDadosObrigatoriosComodo();
+		ValidadorDadosObrigatoriosSolicitacao dadosObrigatoriosSolicitacao = new ValidadorDadosObrigatoriosSolicitacao();
+		ValidadorCpf validadorCpf = new ValidadorCpf();
+		ValidaDadosObrigatoriosUsuario dadosObrigatoriosUsuario = new ValidaDadosObrigatoriosUsuario();
+		ValidaDadosObrigatoriosTipo_Dispositivo dadosObrigatoriosTipo_Dispositivo = new ValidaDadosObrigatoriosTipo_Dispositivo();
+		ValidaDadosObrigatoriosDispositivo dadosObrigatoriosDispositivo = new ValidaDadosObrigatoriosDispositivo();
 
 		/*
 		 * Criando uma lista para conter as regras de negócio de fornencedor
 		 * quando a operação for Salvar
 		 */
-//		List<IStrategy> rnsSalvarFornecedor = new ArrayList<IStrategy>();
-//		List<IStrategy> rnsSalvarUsuario = new ArrayList<IStrategy>();
-//		List<IStrategy> rnsSalvarGenero = new ArrayList<IStrategy>();
-//		List<IStrategy> rnsSalvarProduto = new ArrayList<IStrategy>();
-//		List<IStrategy> rnsSalvarVenda = new ArrayList<IStrategy>();
-		/*
-		 * Adicionando as regras a serem utilizadas na operação Salvar do
-		 * fornecedor
-		 */
-//		rnsSalvarFornecedor.add(vrDadosObrigatoriosFornecedor);
-//		rnsSalvarFornecedor.add(vCnpj);
-		
-		/*
-		 * Adicionando as regras a serem utilizadas na operação Salvar do
-		 * usuario
-		 */
-		
-//		rnsSalvarUsuario.add(validadorCpf);
-//		rnsSalvarUsuario.add(obrigatoriosUsuario);
-//		
-		/*
-		 * Adicionando as regras a serem utilizadas na operação Salvar do
-		 * Genero
-		 */
-//		rnsSalvarGenero.add(obrigatoriosGenero);
-		
-		// regras  produto
-//		
-//		rnsSalvarProduto.add(obrigatoriosProduto);
-//		rnsSalvarProduto.add(quantidadeProduto);	
-//		
+		List<IStrategy> rnsSalvarTipoDispositivo = new ArrayList<IStrategy>();
+		List<IStrategy> rnsSalvarUsuario = new ArrayList<IStrategy>();
+		List<IStrategy> rnsSalvarComodo = new ArrayList<IStrategy>();
+		List<IStrategy> rnsSalvarDispositivo = new ArrayList<IStrategy>();
+		List<IStrategy> rnsSalvarSolicitacao = new ArrayList<IStrategy>();
 
-		
-		/*
-		 * Adicionando as regras a serem utilizadas na operação Salvar do venda
-		 */
-//		rnsSalvarVenda.add(dadosObrigatoriosVenda);
+		// Tipo dispositivo
+		rnsSalvarTipoDispositivo.add(dadosObrigatoriosTipo_Dispositivo);
 
 		/*
-		 * Cria o mapa que poderá conter todas as listas de regras de negócio
-		 * específica por operação do fornecedor
+		 * Adicionando as regras a serem utilizadas na operação Salvar do
+		 * Solicitacao
 		 */
-		Map<String, List<IStrategy>> rnsFornecedor = new HashMap<String, List<IStrategy>>();
+
+		rnsSalvarUsuario.add(dadosObrigatoriosUsuario);
+		rnsSalvarUsuario.add(validadorCpf);
+
+		/*
+		 * Adicionando as regras a serem utilizadas na operação Salvar do Comodo
+		 */
+		rnsSalvarComodo.add(dadosObrigatoriosComodo);
+
+		// Dipositivo
+
+		rnsSalvarDispositivo.add(dadosObrigatoriosDispositivo);
+
+		// solicitacao
+		rnsSalvarSolicitacao.add(dadosObrigatoriosSolicitacao);
+		Map<String, List<IStrategy>> rnsTipoDisposito = new HashMap<String, List<IStrategy>>();
 		Map<String, List<IStrategy>> rnsUsuario = new HashMap<String, List<IStrategy>>();
-		Map<String, List<IStrategy>> rnsVenda = new HashMap<String, List<IStrategy>>();
-		Map<String, List<IStrategy>> rnsGenero = new HashMap<String, List<IStrategy>>();
-		Map<String, List<IStrategy>> rnsProduto = new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsSolicitacao = new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsComodo = new HashMap<String, List<IStrategy>>();
+		Map<String, List<IStrategy>> rnsDispositivo = new HashMap<String, List<IStrategy>>();
 		/*
 		 * Adiciona a listra de regras na operação Salvar no mapa do fornecedor
 		 * (lista criada na linha 70)
 		 */
-//		rnsFornecedor.put("Salvar", rnsSalvarFornecedor);
-//		// usa a mesma rns por ser as mesmas regras de negocio
-//		rnsFornecedor.put("Editar", rnsSalvarFornecedor);
-//		
-//		rnsVenda.put("Salvar", rnsSalvarVenda);
-//		rnsVenda.put("Editar", rnsSalvarVenda);
-//		
-//		// rns usuario
-//		rnsUsuario.put("Salvar", rnsSalvarUsuario);		
-//		rnsUsuario.put("Editar", rnsSalvarUsuario);	
-//		List<IStrategy> rnsConsultarUsuario = new ArrayList<IStrategy>();
-//		rnsConsultarUsuario.add(validadorCpf);
-//		rnsUsuario.put("Consultar", rnsConsultarUsuario);	
-//		
-//		// rns genero
-//		rnsGenero.put("Salvar", rnsSalvarGenero);
-//		rnsGenero.put("Editar", rnsSalvarGenero);
-//		
-//		// rns produto
-//		
-//		rnsProduto.put("Salvar", rnsSalvarProduto);
-//
-//		/*
-//		 * Adiciona o mapa(criado na linha 79) com as regras indexadas pelas
-//		 * operações no mapa geral indexado pelo nome da entidade
-//		 */
-//		rns.put(Fornecedor.class.getName(), rnsFornecedor);
-//		rns.put(Usuario.class.getName(), rnsUsuario);
-//		//rns.put(Venda.class.getName(), rnsVenda);
-//		rns.put(Genero.class.getName(), rnsGenero);
-//		rns.put(Produto.class.getName(),rnsProduto );
+		rnsTipoDisposito.put("Salvar", rnsSalvarTipoDispositivo);
+		// // usa a mesma rns por ser as mesmas regras de negocio
+		rnsTipoDisposito.put("Editar", rnsSalvarTipoDispositivo);
+		//
+		rnsSolicitacao.put("Salvar", rnsSalvarSolicitacao);
+		rnsSolicitacao.put("Editar", rnsSalvarSolicitacao);
+		//
+		// // rns usuario
+		rnsUsuario.put("Salvar", rnsSalvarUsuario);
+		rnsUsuario.put("Editar", rnsSalvarUsuario);
+		//
+		// // rnsComodo
+		rnsComodo.put("Salvar", rnsSalvarComodo);
+		rnsComodo.put("Editar", rnsSalvarComodo);
+		//
+		// // rnsDispositivo
+		//
+		rnsDispositivo.put("Salvar", rnsSalvarDispositivo);
+		rnsDispositivo.put("Editar", rnsSalvarDispositivo);
+		//
+		// /*
+		// * Adiciona o mapa(criado na linha 79) com as regras indexadas pelas
+		// * operações no mapa geral indexado pelo nome da entidade
+		// */
+		rns.put(Tipo_Dispositivo.class.getName(), rnsTipoDisposito);
+		rns.put(Usuario.class.getName(), rnsUsuario);
+		rns.put(Solicitacao.class.getName(), rnsSolicitacao);
+		rns.put(Comodo.class.getName(), rnsComodo);
+		rns.put(Dispositivo.class.getName(), rnsDispositivo);
+
+		System.out.println(rns.get(Tipo_Dispositivo.class.getName()));
 
 	}
 
@@ -264,7 +254,6 @@ public class Fachada implements IFachada {
 
 	}
 
-
 	public static EntidadeDominio buscarGenerico(Long codigo, EntidadeDominio entidade) {
 		String nmClasse = entidade.getClass().getName();
 		IDAO dao = daos.get(nmClasse);
@@ -281,20 +270,17 @@ public class Fachada implements IFachada {
 		Usuario usuario = (Usuario) dao.consultar(entidade);
 		String msg = executarRegras(entidade, "Consultar");
 		if (msg == null) {
-		if(usuario.getCPF() == null){
-			resultado.setMsg("Informação válida");
-			FacesUtil.adicionarMSGInfo("Informação válida");
-			return resultado;
-		}
-		}
-		else
-		{
+			if (usuario.getCPF() == null) {
+				resultado.setMsg("Informação válida");
+				FacesUtil.adicionarMSGInfo("Informação válida");
+				return resultado;
+			}
+		} else {
 			FacesUtil.adicionarMSGError("Informação inválida");
 			resultado.setMsg("Informação invalida");
 			return resultado;
 		}
 		return resultado;
-		
 
 	}
 
@@ -326,12 +312,11 @@ public class Fachada implements IFachada {
 			return null;
 	}
 
-
 	public Usuario autenticar(String cpf, String senha) {
-		UsuarioDAO dao =  new UsuarioDAO();
-		
+		UsuarioDAO dao = new UsuarioDAO();
+
 		return dao.autenticar(cpf, senha);
-		
+
 	}
 
 }

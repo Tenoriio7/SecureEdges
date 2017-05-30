@@ -219,7 +219,7 @@ public class UsuarioDAO implements IDAO {
 		sql.append("end_Bairro = ? ,end_CEP = ?, ");
 		sql.append("end_Cidade = ?, end_Estado = ? , end_Numero = ? , end_Rua = ? , ");
 		sql.append(
-				"usr_Idade = ?, usr_Nome = ? ,usr_RG = ? ,usr_Senha= ? , usr_Sexo= ? , usr_Sobrenome = ? , usr_Status = ? , usr_Telefone = ?, dtCadastro = ? ");
+				"usr_Idade = ?, usr_Nome = ? ,usr_RG = ? ,usr_Senha= ? , usr_Sexo= ? , usr_Sobrenome = ? , usr_Status = ? , usr_Telefone = ?, dtCadastro = ? Where usr_Codigo=  ?");
 
 		Connection con = Conexao.getConnection();
 		PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString(),
@@ -246,6 +246,7 @@ public class UsuarioDAO implements IDAO {
 			SimpleDateFormat stf = new SimpleDateFormat("yyyy/MM/dd");
 			String cadastro = stf.format(new Date());
 			pstm.setString(++i, cadastro);
+			pstm.setLong(++i, usuario.getCodigo());
 
 			System.out.println(pstm.executeUpdate());
 			pstm.executeUpdate();

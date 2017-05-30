@@ -57,7 +57,7 @@
 						<h:outputLabel value="Tipo"></h:outputLabel>
 						<p:selectOneMenu
 							value="#{dispositivoBean.dispositivoCadastro.TP_Dispositivo.codigo}"
-							disabled="#{dispositivoBean.acao== 'Excluir'}">
+							disabled="#{dispositivoBean.acao != 'Salvar'}">
 							<f:selectItems value="#{dispositivoBean.listaTipo_Dispositivos}"
 								var="tp" itemLabel="#{tp.descricao}" itemValue="#{tp.codigo}" />
 							<f:validateBean />

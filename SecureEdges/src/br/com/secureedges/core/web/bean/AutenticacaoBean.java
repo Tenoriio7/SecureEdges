@@ -27,6 +27,10 @@ public class AutenticacaoBean {
 			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			usuarioLogado=usuarioDAO.autenticar(usuarioLogado.getCPF(), usuarioLogado.getSenha());
 			
+			if(usuarioLogado.getStatus().equals("inativo")){
+				FacesUtil.adicionarMSGError("Usuário Desativado" );
+			}
+			else{
 			System.out.println(usuarioLogado.getSenha());
 			if(usuarioLogado == null){
 				FacesUtil.adicionarMSGError("CPF ou Senha invalidos" );
@@ -38,7 +42,7 @@ public class AutenticacaoBean {
 				}
 				
 			
-			
+			}
 				
 			
 			
