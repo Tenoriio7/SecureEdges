@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Mes {
 	List<Dispositivo> listDispositivo;
+	private String nome;
+	private int numero;
 	
 	public List<Dispositivo> getListDispositivo() {
 		if(listDispositivo ==null)
@@ -13,5 +15,17 @@ public class Mes {
 	}
 	public void setListDispositivo(List<Dispositivo> listDispositivo) {
 		this.listDispositivo = listDispositivo;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
 	}
 }
