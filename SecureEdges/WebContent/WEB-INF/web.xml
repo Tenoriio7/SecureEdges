@@ -9,7 +9,6 @@
 	<welcome-file-list>
 		<welcome-file>Pages/Principal.xhtml</welcome-file>
 	</welcome-file-list>
-	type=magnus-internal/jsp exts=jsp
 	<listener>
 		<listener-class>br.com.secureedges.core.ClasseListener</listener-class>
 	</listener>
