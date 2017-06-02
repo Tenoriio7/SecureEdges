@@ -18,12 +18,5 @@ public class GraficoBean extends EntidadeDominio {
 	public RelatorioDAO relatorioDAO =  new RelatorioDAO();
 	public List<EntidadeDominio> relatorios = relatorioDAO.listar();
 	
-	
-	@Test
-	public void teste(){
-		System.out.println(relatorios);
-	}
-	
-	
 
 }

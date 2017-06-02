@@ -62,15 +62,15 @@ public class RelatorioDAO implements IDAO {
 				Solicitacao solic = new Solicitacao();
 				SolicitacaoDAO solicAux = new SolicitacaoDAO();
 				solic = (Solicitacao) solicAux.buscarPorCodigo(rSet.getLong("solicitacao"));
-				System.out.println(solic);
 				mes.addSolicitacao(solic);
+				
 			}
-
+			lista.add(relatorio);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			FacesUtil.adicionarMSGError(e.getMessage());
 		}
-
 		return lista;
 
 	}

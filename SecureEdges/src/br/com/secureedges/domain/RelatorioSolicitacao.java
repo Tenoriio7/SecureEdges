@@ -3,7 +3,7 @@ package br.com.secureedges.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RelatorioSolicitacao {
+public class RelatorioSolicitacao extends EntidadeDominio {
 	private List<Mes> meses;
 	
 	public RelatorioSolicitacao(){
