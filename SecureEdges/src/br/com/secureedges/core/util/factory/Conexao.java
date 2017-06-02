@@ -8,7 +8,7 @@ public class Conexao {
 	
 	private static final String url = "jdbc:mysql://localhost:3306/db_secureedges";
 	private static final String usuario = "root";
-	private static final String senha = "banco16";
+	private static final String senha = "root";
 	
 	public static Connection getConnection(){
 		try {
