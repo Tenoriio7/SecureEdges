@@ -22,8 +22,12 @@
     <servlet-name>Faces Servlet</servlet-name>
     <!--Tipo que ira tratar-->
     <url-pattern>*.xhtml</url-pattern>
-    <url-pattern>*.jsp</url-pattern>
   </servlet-mapping>
+  <context-param>
+	    <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+	    <param-value>.jsp</param-value>
+	</context-param>
+  
   <context-param>
     <param-name>primefaces.THEME</param-name>
     <param-value>rocket</param-value>
