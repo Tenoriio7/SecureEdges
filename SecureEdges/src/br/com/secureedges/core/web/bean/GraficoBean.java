@@ -8,7 +8,9 @@ import javax.faces.bean.ViewScoped;
 
 import org.junit.Test;
 
+import br.com.secureedges.core.dao.DispositivoDAO;
 import br.com.secureedges.core.dao.RelatorioDAO;
+import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
 
 @ManagedBean
@@ -17,6 +19,8 @@ public class GraficoBean extends EntidadeDominio {
 	 
 	public RelatorioDAO relatorioDAO =  new RelatorioDAO();
 	public List<EntidadeDominio> relatorios = relatorioDAO.listar();
+	private DispositivoDAO dispositivoDAO = new DispositivoDAO();
+	public List<EntidadeDominio> dispositivos = dispositivoDAO.listar();
 	
 
 }

@@ -62,6 +62,7 @@ public class RelatorioDAO implements IDAO {
 				Solicitacao solic = new Solicitacao();
 				SolicitacaoDAO solicAux = new SolicitacaoDAO();
 				solic = (Solicitacao) solicAux.buscarPorCodigo(rSet.getLong("solicitacao"));
+				solic.setQtde(rSet.getInt("quantidade"));
 				mes.addSolicitacao(solic);
 				
 			}

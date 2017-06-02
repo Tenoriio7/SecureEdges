@@ -5,6 +5,7 @@ import java.util.List;
 
 public class RelatorioSolicitacao extends EntidadeDominio {
 	private List<Mes> meses;
+	private String titulo;
 	
 	public RelatorioSolicitacao(){
 		meses = new ArrayList<>();
@@ -22,6 +23,14 @@ public class RelatorioSolicitacao extends EntidadeDominio {
 	}
 	public void setListMes(List<Mes> meses) {
 		this.meses = meses;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 	
 }

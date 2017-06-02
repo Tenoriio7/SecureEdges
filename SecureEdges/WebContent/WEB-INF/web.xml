@@ -22,6 +22,7 @@
     <servlet-name>Faces Servlet</servlet-name>
     <!--Tipo que ira tratar-->
     <url-pattern>*.xhtml</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
   </servlet-mapping>
   <context-param>
     <param-name>primefaces.THEME</param-name>

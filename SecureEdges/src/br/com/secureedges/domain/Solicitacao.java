@@ -11,6 +11,7 @@ public class Solicitacao extends EntidadeDominio {
 
 	private String descricao;
 	private Comodo comodo;
+	private int qtde;
 	
 	public Comodo getComodo() {
 		if (comodo ==null)
@@ -78,6 +79,12 @@ public class Solicitacao extends EntidadeDominio {
 
 	public void setDispositivo(Dispositivo dispositivo) {
 		this.dispositivo = dispositivo;
+	}
+	public int getQtde() {
+		return qtde;
+	}
+	public void setQtde(int qtde) {
+		this.qtde = qtde;
 	}
 
 }
