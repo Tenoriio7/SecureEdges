@@ -182,6 +182,11 @@ public class SolicitacaoDAO implements IDAO {
 				solicitacao.setCodigo(rSet.getLong("sol_Codigo"));
 				solicitacao.setStatus((rSet.getString("sol_Status")));
 				solicitacao.getDispositivo().setCodigo((rSet.getLong("tb_Dispositivo_disp_Codigo")));
+				Long dispCodig =solicitacao.getDispositivo().getCodigo();
+				Dispositivo dispAux =  new  Dispositivo();
+				DispositivoDAO  dispositivoDAO = new DispositivoDAO();
+				dispAux =(Dispositivo) dispositivoDAO.buscarPorCodigo(dispCodig);
+				solicitacao.setDispositivo(dispAux);
 				solicitacao.getComodo().setCodigo((rSet.getLong("tb_Comodo_cmdo_Codigo")));
 				solicitacao.setDescricao(rSet.getString("sol_descricao"));
 				solicitacao.setData(rSet.getDate("sol_data"));
