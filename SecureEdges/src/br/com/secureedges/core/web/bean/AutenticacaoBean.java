@@ -27,7 +27,7 @@ public class AutenticacaoBean {
 			UsuarioDAO usuarioDAO = new UsuarioDAO();
 			usuarioLogado=usuarioDAO.autenticar(usuarioLogado.getCPF(), usuarioLogado.getSenha());
 			
-			if(usuarioLogado.getStatus().equals("inativo")){
+			if(usuarioLogado.getStatus().equals("desativado")){
 				FacesUtil.adicionarMSGError("Usuário Desativado" );
 			}
 			else{
