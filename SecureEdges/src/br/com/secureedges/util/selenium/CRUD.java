@@ -1,4 +1,4 @@
-package br.com.tenoriogames.core.util.selenium;
+package br.com.secureedges.util.selenium;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,17 +13,19 @@ public class CRUD extends TEST {
 	@Test
 	public void realizarCrud(){
 		
-		driver=Login.efetuarLogin("719.392.286-62","alemanha");
+		driver=Login.efetuarLogin("3359.027.068-31","12345");
 		driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
 		driver.navigate().refresh();
-		driver.get("http://localhost:8080/TenorioGames/Pages/Genero/generoPesquisa.xhtml");
-		driver.findElement(By.id("formgenero:dtgenero:btnovo")).click();
-		driver.findElement(By.id("frmFabCad:txtdescricao")).sendKeys("Descrição Selenium");
-		driver.findElement(By.id("frmFabCad:btsalvar")).click();
-		driver.get("http://localhost:8080/TenorioGames/Pages/Genero/generoPesquisa.xhtml");
-		driver.findElement(By.id("formgenero:dtgenero:2:btExcluir")).click();
-		driver.findElement(By.id("frmFabCad:btExcluir")).click();
-		driver.get("http://localhost:8080/TenorioGames/Pages/Genero/generoPesquisa.xhtml");
+		driver.get("http://localhost:8080/SecureEdges/Pages/dispositivo/dispositivoPesquisa.xhtml");
+		driver.findElement(By.id("formdispositivo:dtdispositivo:btnovo")).click();
+		driver.findElement(By.id("j_idt28:inputDescricao")).sendKeys("Descrição Selenium");
+		wait = new WebDriverWait(driver,2000); // espera 
+		driver.findElement(By.id("j_idt28:j_idt46")).click();
+		driver.get("http://localhost:8080/SecureEdges/Pages/dispositivo/dispositivoPesquisa.xhtml");
+		driver.findElement(By.id("formdispositivo:dtdispositivo:3:btExcluir")).click();
+		wait = new WebDriverWait(driver,5000); // espera 
+		driver.findElement(By.id("j_idt28:btnExcluir")).click();
+		driver.get("http://localhost:8080/SecureEdges/Pages/dispositivo/dispositivoPesquisa.xhtml");
 
 		
 		

@@ -37,7 +37,8 @@
 					<h:outputLabel value="Descricao"></h:outputLabel>
 					<h:inputText maxlength="50" size="30"
 						value="#{dispositivoBean.dispositivoCadastro.descricao}"
-						disabled="#{dispositivoBean.acao == 'Excluir'}" />
+						disabled="#{dispositivoBean.acao == 'Excluir'}"
+						id="inputDescricao" />
 
 
 					<h:panelGrid columns="2">
@@ -78,7 +79,8 @@
 							rendered="#{dispositivoBean.acao != 'Excluir' and dispositivoBean.acao != 'Editar'}" />
 						<p:commandButton value="Excluir"
 							actionListener="#{dispositivoBean.excluir}" update=":msgGlobal"
-							rendered="#{dispositivoBean.acao== 'Excluir'}" />
+							rendered="#{dispositivoBean.acao== 'Excluir'}"
+							id="btnExcluir" />
 
 						<p:commandButton value="Editar"
 							actionListener="#{dispositivoBean.editar}" update=":msgGlobal"
