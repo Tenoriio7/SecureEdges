@@ -1,5 +1,6 @@
-package br.com.
+package br.com.secureedges.util.selenium;
 
+import org.openqa.grid.selenium.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

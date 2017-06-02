@@ -1,4 +1,4 @@
-package br.com.tenoriogames.core.util.selenium;
+package br.com.secureedges.util.selenium;
 
 import java.util.concurrent.TimeUnit;
 
