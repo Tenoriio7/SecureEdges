@@ -4,17 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mes {
-	List<Dispositivo> listDispositivo;
+	List<Solicitacao> listSolicitacao;
 	private String nome;
 	private int numero;
 	
-	public List<Dispositivo> getListDispositivo() {
-		if(listDispositivo ==null)
-			listDispositivo = new ArrayList<>();
-		return listDispositivo;
+	public Mes()
+	{
+		if(listSolicitacao == null)
+		{
+			listSolicitacao = new ArrayList<>();
+		}
 	}
-	public void setListDispositivo(List<Dispositivo> listDispositivo) {
-		this.listDispositivo = listDispositivo;
+	
+	public void addSolicitacao(Solicitacao solicitacao)
+	{
+		listSolicitacao.add(solicitacao);
+	}
+	
+	public List<Solicitacao> getListDispositivo() {
+		if(listSolicitacao ==null)
+			listSolicitacao = new ArrayList<>();
+		return listSolicitacao;
+	}
+	public void setListDispositivo(List<Solicitacao> listSolicitacao) {
+		this.listSolicitacao = listSolicitacao;
 	}
 	public String getNome() {
 		return nome;

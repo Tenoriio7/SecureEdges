@@ -13,6 +13,9 @@ import br.com.secureedges.core.IDAO;
 import br.com.secureedges.core.util.factory.Conexao;
 import br.com.secureedges.domain.Dispositivo;
 import br.com.secureedges.domain.EntidadeDominio;
+import br.com.secureedges.domain.Mes;
+import br.com.secureedges.domain.RelatorioSolicitacao;
+import br.com.secureedges.domain.Solicitacao;
 import br.com.secureedges.util.FacesUtil;
 
 public class RelatorioDAO implements IDAO {
@@ -34,9 +37,16 @@ public class RelatorioDAO implements IDAO {
 	public List<EntidadeDominio> listar() {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
-				"SELECT sol.sol_Codigo,disp.disp_codigo,disp.disp_descricao,sol.sol_data,count(*) from (tb_solicitacao as sol) inner join (tb_dispositivo as disp) "
-						+ "on sol.tb_Dispositivo_disp_Codigo = disp.disp_codigo group by(disp.disp_codigo)"
-						+ "order by MONTH(sol.sol_data),disp.disp_codigo;");
+				"SELECT sol.sol_Codigo as solicitacao"
+				+ ",disp.disp_codigo as dispositivo"
+				+ ",disp.disp_descricao as descricao"
+				+ ",MONTH(sol.sol_data) as data"
+				+ ",count(*) as quantidade"
+				+ " from (tb_solicitacao as sol) "
+				+ "inner join (tb_dispositivo as disp) "
+				+ "on sol.tb_Dispositivo_disp_Codigo = disp.disp_codigo "
+				+ "group by(disp.disp_codigo)"
+				+ "order by MONTH(sol.sol_data),disp.disp_codigo;");
 		List<EntidadeDominio> lista = new ArrayList<EntidadeDominio>();
 
 		Connection con = Conexao.getConnection();
@@ -44,18 +54,15 @@ public class RelatorioDAO implements IDAO {
 		try {
 			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
 			ResultSet rSet = pstm.executeQuery();
-
+			RelatorioSolicitacao relatorio = new RelatorioSolicitacao();
+			
 			while (rSet.next()) {
 
-				Dispositivo dispositivo = new Dispositivo();
-				dispositivo.setCodigo(rSet.getLong("disp_Codigo"));
-				dispositivo.setDescricao(rSet.getString("disp_Descricao"));
-				dispositivo.getComodo().setCodigo(rSet.getLong("cmdo_Codigo"));
-				dispositivo.getTP_Dispositivo().setCodigo(rSet.getLong("tp_disp_Codigo"));
-				dispositivo.setInterface_Arduino(rSet.getLong("interface_Arduino"));
-				dispositivo.setDisp_status(rSet.getInt("disp_status"));
-
-				lista.add(dispositivo);
+				Mes mes = relatorio.getListMes().get(rSet.getInt("data"));
+				Solicitacao solic = new Solicitacao();
+				SolicitacaoDAO solicAux = new SolicitacaoDAO();
+				solic = (Solicitacao) solicAux.buscarPorCodigo(rSet.getLong("solicitacao"));
+				mes.addSolicitacao(solic);
 			}
 
 		} catch (SQLException e) {
