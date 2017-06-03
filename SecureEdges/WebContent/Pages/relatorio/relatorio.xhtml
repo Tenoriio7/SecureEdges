@@ -8,11 +8,13 @@
 <ui:composition template="/templates/modeloGeral.xhtml">
 	<ui:define name="conteudo">
 		<h:form>
-			
-			<IFRAME src="http://localhost:8080/SecureEdges/Pages/relatorio/relatorioSolicitacao.jsp" width="250" height="350" scrolling="no" frameborder="0" align="center"></IFRAME> 
-				
 
-	
+			<p:chart type="bar" model="#{chartView.barModel}"
+				style="height:300px" />
+
+
+
+
 
 
 		</h:form>

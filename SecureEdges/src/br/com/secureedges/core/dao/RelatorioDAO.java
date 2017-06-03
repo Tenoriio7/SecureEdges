@@ -37,6 +37,67 @@ public class RelatorioDAO implements IDAO {
 	public List<EntidadeDominio> listar() {
 		StringBuffer sql = new StringBuffer();
 		sql.append(
+				"SELECT sol.sol_Status as solicitacao_descricao, sol.sol_Codigo as solicitacao"
+				+ ",disp.disp_codigo as dispositivo"
+				+ ",disp.disp_descricao as descricao"
+				+ ",MONTH(sol.sol_data) as data"
+				+ ",count(*) as quantidade"
+				+ " from (tb_solicitacao as sol) "
+				+ "inner join (tb_dispositivo as disp) "
+				+ "on sol.tb_Dispositivo_disp_Codigo = disp.disp_codigo "
+				+ "group by(disp.disp_codigo)"
+				+ "order by MONTH(sol.sol_data),disp.disp_codigo;");
+		List<EntidadeDominio> lista = new ArrayList<EntidadeDominio>();
+
+		Connection con = Conexao.getConnection();
+
+		try {
+			PreparedStatement pstm = (PreparedStatement) con.prepareStatement(sql.toString());
+			ResultSet rSet = pstm.executeQuery();
+			RelatorioSolicitacao relatorio = new RelatorioSolicitacao();
+			
+			while (rSet.next()) {
+
+				Mes mes = relatorio.getListMes().get(rSet.getInt("data"));
+				Solicitacao solic = new Solicitacao();
+				SolicitacaoDAO solicAux = new SolicitacaoDAO();
+				solic = (Solicitacao) solicAux.buscarPorCodigo(rSet.getLong("solicitacao"));
+				solic.setQtde(rSet.getInt("quantidade"));
+				solic.setStatus(rSet.getString("solicitacao_descricao"));
+				mes.addSolicitacao(solic);
+				
+			}
+			lista.add(relatorio);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			FacesUtil.adicionarMSGError(e.getMessage());
+		}
+		return lista;
+
+	}
+
+	public EntidadeDominio buscarPorCodigo(Long codigo) {
+
+		return null;
+	}
+
+	@Override
+	public EntidadeDominio consultar(EntidadeDominio entidade) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	public List<EntidadeDominio> listar2() {
+		StringBuffer sql = new StringBuffer();
+		sql.append(
 				"SELECT sol.sol_Codigo as solicitacao"
 				+ ",disp.disp_codigo as dispositivo"
 				+ ",disp.disp_descricao as descricao"
@@ -75,17 +136,31 @@ public class RelatorioDAO implements IDAO {
 		return lista;
 
 	}
-
-	public EntidadeDominio buscarPorCodigo(Long codigo) {
-
-		return null;
-	}
-
-	@Override
-	public EntidadeDominio consultar(EntidadeDominio entidade) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
 
